@@ -1,0 +1,71 @@
+<!-- Brennan Chan -->
+<!-- brlchan@ucsc.edu -->
+<!-- Notes: resources I used are in the README.md-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
+  </head>
+
+  <body onload="main()">
+    <canvas id="example" width="400" height="400">
+      Please use a browser that supports "canvas"
+    </canvas>
+    <script src="asg0.js"></script>
+    <!-- Load Scripts -->
+    <script src="../lib/cuon-matrix-cse160.js"></script>
+
+    <!-- inputs for x and y of v1 and v2-->
+    <br><br>
+    <label for="vect">v1:</label>
+
+    <label for="v1x">x</label>
+    <input type="text" id="v1x" name="v1x" required 
+        minlength="4" maxlength="8" size="10" />
+
+    <label for="v1y">y</label>
+    <input type="text" id="v1y" name="v1y" required 
+        minlength="4" maxlength="8" size="10" />
+
+    <br>
+    <label for="vect">v2:</label>
+
+    <label for="v2x">x</label>
+    <input type="text" id="v2x" name="v2x" required 
+        minlength="4" maxlength="8" size="10" />
+
+    <label for="v2y">y</label>
+    <input type="text" id="v2y" name="v2y" required 
+        minlength="4" maxlength="8" size="10" />
+    <br>
+
+    <br>
+    <!-- draw button -->
+    <input type="button" value="Draw" onclick="handleDrawEvent()">
+
+    <br><br>
+
+    <!-- selection for operations -->
+    <label for="ops">Operation:</label>
+
+    <select name="ops" id="ops">
+      <option value="add">Add</option>
+      <option value="sub">Subtract</option>
+      <option value="div">Divide</option>
+      <option value="mul">Multiply</option>
+      <option value="magnitude">Magnitude</option>
+      <option value="normalize">Normalize</option>
+      <option value="anglebtwn">Angle Between</option>
+      <option value="area">Area</option>
+    </select>
+
+    <label for="scalar">Scalar</label>
+    <input type="text" id="scalar" name="scalar" required 
+        minlength="4" maxlength="8" size="10" />
+
+    <input type="button" value="Draw" onclick="handleDrawOperationEvent()">
+
+  </body>
+</html>
