@@ -2,9 +2,10 @@
 // Vertex shader program
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
+  uniform float u_Size;
   void main() {
     gl_Position = a_Position;
-    gl_PointSize = 10.0;
+    gl_PointSize = u_Size;
   }`
 
 // Fragment shader program
@@ -20,6 +21,7 @@ let canvas;
 let gl;
 let a_Position;
 let u_FragColor;
+let u_Size;
 
 function setupWebGL(){
   // Retrieve <canvas> element
@@ -53,6 +55,33 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of u_FragColor');
     return;
   }
+
+  // Get the storage location of u_Size
+  u_Size = gl.getUniformLocation(gl.program, 'u_Size');
+  if(!u_Size){
+    console.log('Failed to get the storage location of u_Size');
+    return;
+  }
+}
+
+// Globals for UI elements
+let g_selectedColor=[1.0,1.0,1.0,1.0];
+let g_selectedSize = 20;
+
+// Set up actions for ther HTML UI elements
+function addAllActionsForHtmlUI(){
+
+  // button events (shape)
+  document.getElementById('green').onclick = function() {g_selectedColor = [0.0,1.0,0.0,1.0];};
+  document.getElementById('red').onclick = function() {g_selectedColor = [1.0,0.0,0.0,1.0];};
+
+  // color slider events
+  document.getElementById('redSlide').addEventListener('mouseup', function() { g_selectedColor[0] = this.value/100; });
+  document.getElementById('greenSlide').addEventListener('mouseup', function() { g_selectedColor[1] = this.value/100; });
+  document.getElementById('blueSlide').addEventListener('mouseup', function() { g_selectedColor[2] = this.value/100; });
+
+  // size slider events
+  document.getElementById('sizeSlide').addEventListener('mouseup', function() { g_selectedSize = this.value; });
 }
 
 function main() {
@@ -61,6 +90,7 @@ function main() {
 
   connectVariablesToGLSL();
 
+  addAllActionsForHtmlUI();
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = click;
 
@@ -73,7 +103,7 @@ function main() {
 
 var g_points = [];  // The array for the position of a mouse press
 var g_colors = [];  // The array to store the color of a point
-
+var g_sizes = []; // The array to store the size of a point
 
 
 function convertCoordinates(ev){
@@ -95,11 +125,15 @@ function renderAllShapes(){
   for(var i = 0; i < len; i++) {
     var xy = g_points[i];
     var rgba = g_colors[i];
+    var size = g_sizes[i];
 
     // Pass the position of a point to a_Position variable
     gl.vertexAttrib3f(a_Position, xy[0], xy[1], 0.0);
     // Pass the color of a point to u_FragColor variable
     gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+
+    // Pass the size of a point to the u_Size variable
+    gl.uniform1f(u_Size, size);
     // Draw
     gl.drawArrays(gl.POINTS, 0, 1);
   }
@@ -110,14 +144,18 @@ function click(ev) {
   let [x,y] = convertCoordinates(ev);
   // Store the coordinates to g_points array
   g_points.push([x, y]);
+
+  g_colors.push(g_selectedColor.slice());
+
+  g_sizes.push(g_selectedSize);
   // Store the coordinates to g_points array
-  if (x >= 0.0 && y >= 0.0) {      // First quadrant
+  /*if (x >= 0.0 && y >= 0.0) {      // First quadrant
     g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
   } else if (x < 0.0 && y < 0.0) { // Third quadrant
     g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Green
   } else {                         // Others
     g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
-  }
+  }*/
 
   renderAllShapes();
 }
