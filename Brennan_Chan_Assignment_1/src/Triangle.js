@@ -25,8 +25,8 @@ class Triangle{
     //gl.drawArrays(gl.POINTS, 0, 1);
 
     // Delta
-    var d = this.size/200.0;
-    drawTriangle([xy[0], xy[1], xy[0] + d, xy[1], xy[0], xy[1] + d]);
+    var d = this.size/360.0;
+    drawTriangle([xy[0], xy[1] + 1.5 * d, xy[0] - d, xy[1] , xy[0] + d, xy[1]]);
   }
   }
 
