@@ -74,6 +74,7 @@ let g_selectedColor=[1.0,1.0,1.0,1.0];
 let g_selectedSize = 20;
 let g_selectedType = POINT;
 let g_selectedSeg = 10;
+let g_selectedRot = 0;
 // Set up actions for ther HTML UI elements
 function addAllActionsForHtmlUI(){
 
@@ -93,6 +94,9 @@ function addAllActionsForHtmlUI(){
   document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
   document.getElementById('triangleButton').onclick = function() {g_selectedType=TRIANGLE};
   document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
+
+  // rotate button event
+  document.getElementById('rotateButton').onclick = function() {g_selectedRot = (g_selectedRot + 1) % 4};
   
   // size slider events
   document.getElementById('sizeSlide').addEventListener('mouseup', function() { g_selectedSize = this.value; });
@@ -136,6 +140,7 @@ function click(ev) {
     point = new Point();
   } else if (g_selectedType == TRIANGLE){
     point = new Triangle();
+    point.orient =g_selectedRot;
   } else {
     point = new Circle();
     point.segments=g_selectedSeg;
@@ -176,7 +181,7 @@ function renderAllShapes(){
 
   var duration = performance.now() - startTime;
 
-  sendTextToHTML("numdot: " + len + "ms: " + Math.floor(duration) + "fps: " + Math.floor(10000/duration)/10, "numdot");
+  sendTextToHTML("numdot: " + len + "ms: " + Math.floor(duration) + "fps: " + Math.floor(10000/duration)/10 + " orientation: " + g_selectedRot * 90, "numdot");
 }
 
 function sendTextToHTML(text, htmlID){

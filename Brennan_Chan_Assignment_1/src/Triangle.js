@@ -4,6 +4,7 @@ class Triangle{
       this.position = [0.0,0.0,0.0];
       this.color = [1.0,1.0,1.0,1.0];
       this.size = 5.0;
+      this.orient = 0;
     }
   
   render() {
@@ -26,8 +27,17 @@ class Triangle{
 
     // Delta
     var d = this.size/360.0;
+    if(this.orient == 0){
     drawTriangle([xy[0], xy[1] + 1.5 * d, xy[0] - d, xy[1] , xy[0] + d, xy[1]]);
+    }else if(this.orient == 1){
+      drawTriangle([xy[0] + 1.5 * d, xy[1], xy[0], xy[1] - d, xy[0], xy[1] + d]);
+    }else if(this.orient == 2){
+      drawTriangle([xy[0], xy[1] - 1.5 * d, xy[0] - d, xy[1] , xy[0] + d, xy[1]]);
+    }else{
+      drawTriangle([xy[0] - 1.5 * d, xy[1], xy[0], xy[1] - d, xy[0], xy[1] + d]);
+    }
   }
+
   }
 
 function drawTriangle(vertices){
@@ -61,3 +71,5 @@ function drawTriangle(vertices){
     gl.drawArrays(gl.TRIANGLES, 0, n);
     //return n;
   }
+
+ 
