@@ -72,4 +72,69 @@ function drawTriangle(vertices){
     //return n;
   }
 
- 
+ function drawPicture(){
+  // Specify the color for clearing <canvas>
+  gl.clearColor(0, 0, 0, 1);
+
+  // Clear <canvas>
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  // "Black" 
+  gl.uniform4f(u_FragColor, .2, .2, .2, 1);
+
+  // front wheel
+  drawTriangle([-.4,0 ,-.3,-.1 ,-.1,0]);
+  drawTriangle([-.3,-.1 ,-.2,-.1,-.1,0]);
+  drawTriangle([-.4,0 ,-.1,0 ,-.4,.1]);
+  drawTriangle([-.4,.1 ,-.1,0 ,-.1,.1]);
+  drawTriangle([-.4,.1 ,-.3,.2 ,-.2,.2]);
+  drawTriangle([-.4,.1 ,-.2,.2 ,-.1,.1]);
+
+  // rear wheel
+  drawTriangle([.3,0 ,.4,-.1 ,.6,0]);
+  drawTriangle([.4,-.1 ,.5,-.1,.6,0]);
+  drawTriangle([.3,0 ,.6,0 ,.3,.1]);
+  drawTriangle([.3,.1 ,.6,0 ,.6,.1]);
+  drawTriangle([.3,.1 ,.4,.2 ,.5,.2]);
+  drawTriangle([.3,.1 ,.5,.2 ,.6,.1]);
+
+  drawTriangle([-.3,.3, -.1,.3, -.1,.4]);
+  drawTriangle([-.1,.3, -.1,.4, .3,.3]);
+  drawTriangle([-.1,.4, .3,.3, .5,.4]);
+  // Grey
+  gl.uniform4f(u_FragColor, .4, .4, .4, 1);
+  //gl.uniform1f(u_Size, 5);
+  drawTriangle([-.1,0, -.1, .1 , .3, 0]);
+  drawTriangle([.3,.1, -.1, .1 , .3, 0]);
+  drawTriangle([-.65,0 ,-.65,.1 ,-.4,0]);
+  drawTriangle([-.65,.1, -.4,0, -.4,.1]);
+  drawTriangle([-.75,0, -.65,0, -.65,.1]);
+  drawTriangle([.6,0, .6,.1, .8,.1]);
+
+  // Orange
+  gl.uniform4f(u_FragColor, 1, .55, 0, 1);
+  drawTriangle([-.1,.1,-.2,.2,.4,.2]);
+  drawTriangle([-.1,.1,.3,.1,.4,.2]);
+  drawTriangle([-.8,.1, -.6,.2, -.4,.1]);
+  drawTriangle([-.6,.2, -.4,.1, -.3,.2]);
+  drawTriangle([-.6,.2, -.3,.2, -.3,.3]);
+  drawTriangle([-.3,.2, -.3,.3, .8,.3]);
+  drawTriangle([-.3,.2, .8,.2, .8,.3]);
+  drawTriangle([.5,.2, .8,.1, .8,.2]);
+  drawTriangle([.5,.2, .6,.1, .8,.1]);
+  drawTriangle([.3,.3, .5,.3, .5,.4]);
+  drawTriangle([.5,.3, .5,.4, .8,.3]);
+
+  // Red
+  gl.uniform4f(u_FragColor, 1, .3, .3, 1);
+  drawTriangle([.8,.1, .8,.3, .82,.3]);
+  drawTriangle([.8,.1, .82,.3, .82,.1]);
+
+  // Yellow
+  gl.uniform4f(u_FragColor, .7, .7, 0, 1);
+  drawTriangle([-.75,.125, -.685,.19, -.6,.2]);
+  //gl.uniform1f(u_Size, 5);
+  //drawTriangle([]);
+
+  // 35 TOTAL TRIANGLES FOR THIS DRAWING OF A CAR
+ }

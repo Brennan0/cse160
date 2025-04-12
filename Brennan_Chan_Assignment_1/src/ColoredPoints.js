@@ -95,6 +95,8 @@ function addAllActionsForHtmlUI(){
   document.getElementById('triangleButton').onclick = function() {g_selectedType=TRIANGLE};
   document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
 
+  document.getElementById('pictureButton').onclick = function() {drawPicture()};
+
   // rotate button event
   document.getElementById('rotateButton').onclick = function() {g_selectedRot = (g_selectedRot + 1) % 4};
   
