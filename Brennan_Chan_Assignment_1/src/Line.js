@@ -29,7 +29,6 @@ class Line {
       gl.uniform4fv(u_FragColor, this.color);
 
       gl.uniform1f(u_Size, this.size);
-      //gl.lineWidth(this.size);
 
       gl.drawArrays(gl.LINES, 0, 2);
     }
