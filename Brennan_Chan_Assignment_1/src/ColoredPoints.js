@@ -68,6 +68,7 @@ function connectVariablesToGLSL(){
 const POINT = 0;
 const TRIANGLE = 1;
 const CIRCLE = 2;
+const LINE = 3;
 
 // Globals for UI elements
 let g_selectedColor=[1.0,1.0,1.0,1.0];
@@ -94,6 +95,8 @@ function addAllActionsForHtmlUI(){
   document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
   document.getElementById('triangleButton').onclick = function() {g_selectedType=TRIANGLE};
   document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
+  document.getElementById('lineButton').onclick = function() {g_selectedType=LINE};
+
 
   document.getElementById('pictureButton').onclick = function() {drawPicture()};
 
@@ -132,10 +135,12 @@ var g_shapesList = [];
 //var g_colors = [];  // The array to store the color of a point
 //var g_sizes = []; // The array to store the size of a point
 
+let start = null;
 
 function click(ev) {
   // gather x and y as converted from even to GL
   let [x,y] = convertCoordinates(ev);
+
   // Create and store the new point
   let point;
   if (g_selectedType == POINT){
@@ -143,9 +148,21 @@ function click(ev) {
   } else if (g_selectedType == TRIANGLE){
     point = new Triangle();
     point.orient =g_selectedRot;
-  } else {
+  } else if (g_selectedType == CIRCLE){
     point = new Circle();
     point.segments=g_selectedSeg;
+  } else{
+    if (!start) {
+      start = [x, y];
+    } else {
+      line = new Line(start, [x, y]);
+      line.color = g_selectedColor.slice();
+      line.size = g_selectedSize/20;
+      g_shapesList.push(line);
+      start = null;
+      renderAllShapes();
+    }
+    return;
   }
   point.position=[x,y];
   point.color=g_selectedColor.slice();
