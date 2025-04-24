@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Change a point color</title>
+  </head>
+
+  <body onload="main()">
+    <canvas id="webgl" width="400" height="400">
+    Please use a browser that supports "canvas"
+    </canvas>
+    <!--<img src="Car_img.jpg" alt="Reference for the drawn image" width = 700 px>-->
+    <p id="numdot"> XXX </p>
+    <!-- Buttons -->
+    <button type="button" id="green">Green</button>
+    <button type="button" id="red">Red</button>
+    <button type="button" id="clearButton">Clear</button>
+    <br><br>
+    <button type="button" id="pointButton">Point</button>
+    <button type="button" id="triangleButton">Triangle</button>
+    <button type="button" id="rotateButton">Rotate 90</button>
+    <p>Wow that is a rotate button for drawing triangles!</p>
+    <button type="button" id="circleButton">Circle</button>
+    <button type="button" id="lineButton">Line</button>
+    <p>And a Line drawing feature using two mouse click points! If you drag it, it kinda looks like drawing with chalk</p>
+    <br>
+    <button type="picture" id="pictureButton">Picture</button>
+    <!-- Sliders -->
+    <!--
+    <p>
+    Red <input type="range" min="0" max="100" value="100" class="slider" id="redSlide">
+    <p>
+    Green <input type="range" min="0" max="100" value="100" class="slider" id="greenSlide">
+    <p>
+    Blue <input type="range" min="0" max="100" value="100" class="slider" id="blueSlide">
+    <p>
+    Size <input type="range" min="5" max="40" value="20" class="slider" id="sizeSlide">
+    <p>
+    Segments <input type="range" min="7" max="20" value="10" class="slider" id="segSlide">
+    --><p>
+    Yellow <input type="range" min="-45" max="45" value="0" class="slider" id="yellowSlide">
+    <p>
+    Magenta <input type="range" min="-45" max="45" value="0" class="slider" id="magentaSlide">
+    <p>
+    Camera Angle <input type="range" min="-180" max="180" value="0" class="slider" id="angleSlide">
+    <p>
+    
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/cuon-matrix.js"></script>
+    <script src="Point.js"></script>
+    <script src="Triangle.js"></script>
+    <script src="Circle.js"></script>
+    <script src="Cube.js"></script>
+    <script src="Line.js"></script>
+    <script src="BlockyAnimal.js"></script>
+  </body>
+</html>
