@@ -97,11 +97,11 @@ let g_selectedSize = 20;
 let g_selectedType = POINT;
 let g_selectedSeg = 10;
 let g_selectedRot = 0;
-let g_globalAngle = 0;
-let g_yellowAngle = 0;
+let g_globalAngle = 45;
+let g_neckAngle = 0;
 let g_magentaAngle = 0;
 
-let g_yellowAnimation = false;
+let g_neckAnimation = false;
 let g_magentaAnimation = false;
 // Set up actions for ther HTML UI elements
 function addAllActionsForHtmlUI(){
@@ -130,14 +130,14 @@ function addAllActionsForHtmlUI(){
   // rotate button event
   //document.getElementById('rotateButton').onclick = function() {g_selectedRot = (g_selectedRot + 1) % 4};
   
-  document.getElementById('yellowOnButton').onclick = function() {g_yellowAnimation = true;}
-  document.getElementById('yellowOffButton').onclick = function() {g_yellowAnimation = false;}
+  document.getElementById('yellowOnButton').onclick = function() {g_neckAnimation = true;}
+  document.getElementById('yellowOffButton').onclick = function() {g_neckAnimation = false;}
 
   document.getElementById('magOnButton').onclick = function() {g_magentaAnimation = true;}
   document.getElementById('magOffButton').onclick = function() {g_magentaAnimation = false;}
   // size slider events
   //document.getElementById('sizeSlide').addEventListener('mouseup', function() { g_selectedSize = this.value; });
-  document.getElementById('yellowSlide').addEventListener('mousemove', function() { g_yellowAngle = this.value; renderScene(); });
+  document.getElementById('yellowSlide').addEventListener('mousemove', function() { g_neckAngle = this.value; renderScene(); });
 
   document.getElementById('magentaSlide').addEventListener('mousemove', function() { g_magentaAngle = this.value; renderScene(); });
   //document.getElementById('segSlide').addEventListener('mouseup', function() { g_selectedSeg = this.value; });
@@ -235,8 +235,8 @@ function convertCoordinates(ev){
 }
 
 function updateAnimationAngles(){
-  if (g_yellowAnimation){
-    g_yellowAngle = (45*Math.sin(g_seconds));
+  if (g_neckAnimation){
+    g_neckAngle = (45*Math.sin(g_seconds));
   }
   if (g_magentaAnimation){
     g_magentaAngle = (45*Math.sin(5 * g_seconds));
@@ -258,21 +258,27 @@ function renderScene(){
 
   // Draw a test triangle
   //drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 0.0,0.0,0.0]);
+  var pyr = new Pyr();
+  pyr.color = [1.0,0.0,0.0,1.0];
+  pyr.matrix.translate(0,0,0);
+  pyr.matrix.rotate(34,1,0,0);
+  pyr.matrix.scale(0.5,0.5,0.5);
+  pyr.render();
 
   // Draw the body cube
   var body = new Cube();
   body.color = [1.0,0.0,0.0,1.0];
   body.matrix.translate(-0.25,-.75,-.5);
   body.matrix.rotate(0,1,0,0);
-  body.matrix.scale(0.5,0.3,1.5);
+  body.matrix.scale(0.5,0.3,1);
   body.render();
 
   // Draw left arm
-  var yellow = new Cube();
-  yellow.color = [1,1,0,1];
-  yellow.matrix.setTranslate(0,-.7,-.4);
-  yellow.matrix.rotate(-60,1,0,0);
-  yellow.matrix.rotate(-g_yellowAngle,0,0,1);
+  var neck = new Cube();
+  neck.color = [1,1,0,1];
+  neck.matrix.setTranslate(0,-.7,-.4);
+  neck.matrix.rotate(-60,1,0,0);
+  neck.matrix.rotate(-g_neckAngle,0,0,1);
   /*
   if (g_yellowAnimation){
     yellow.matrix.rotate(45*Math.sin(g_seconds), 0,0,1);
@@ -280,15 +286,15 @@ function renderScene(){
     yellow.matrix.rotate(-g_yellowAngle,0,0,1);
   }
   */
-  var yellowCoordinatesMat = new Matrix4(yellow.matrix);
-  yellow.matrix.scale(0.25,.5,.25);
-  yellow.matrix.translate(-.5,0,0);
-  yellow.render();
+  var neckCoordinatesMat = new Matrix4(neck.matrix);
+  neck.matrix.scale(0.2,.3,.25);
+  neck.matrix.translate(-.5,0,0);
+  neck.render();
 
   var magenta = new Cube();
   magenta.color = [1,0,1,1];
-  magenta.matrix = yellowCoordinatesMat; //translate(-.1,.1,0,0);
-  magenta.matrix.translate(0,0.65,0);
+  magenta.matrix = neckCoordinatesMat; //translate(-.1,.1,0,0);
+  magenta.matrix.translate(0,0.3,-.025);
   magenta.matrix.rotate(g_magentaAngle,0,0,1);
   magenta.matrix.scale(.3,.3,.3);
   magenta.matrix.translate(-.5,0,-0.001);
