@@ -100,6 +100,9 @@ let g_selectedRot = 0;
 let g_globalAngle = 0;
 let g_yellowAngle = 0;
 let g_magentaAngle = 0;
+
+let g_yellowAnimation = false;
+let g_magentaAnimation = false;
 // Set up actions for ther HTML UI elements
 function addAllActionsForHtmlUI(){
 
@@ -127,6 +130,11 @@ function addAllActionsForHtmlUI(){
   // rotate button event
   //document.getElementById('rotateButton').onclick = function() {g_selectedRot = (g_selectedRot + 1) % 4};
   
+  document.getElementById('yellowOnButton').onclick = function() {g_yellowAnimation = true;}
+  document.getElementById('yellowOffButton').onclick = function() {g_yellowAnimation = false;}
+
+  document.getElementById('magOnButton').onclick = function() {g_magentaAnimation = true;}
+  document.getElementById('magOffButton').onclick = function() {g_magentaAnimation = false;}
   // size slider events
   //document.getElementById('sizeSlide').addEventListener('mouseup', function() { g_selectedSize = this.value; });
   document.getElementById('yellowSlide').addEventListener('mousemove', function() { g_yellowAngle = this.value; renderScene(); });
@@ -154,12 +162,22 @@ function main() {
   // Clear <canvas>
   //gl.clear(gl.COLOR_BUFFER_BIT);
 
-  renderScene();
+  //renderScene();
+  requestAnimationFrame(tick);
 }
 
+var g_startTime = performance.now()/1000.0;
+var g_seconds = performance.now()/1000.0-g_startTime;
 
 function tick(){
-  
+  g_seconds = performance.now()/1000.0-g_startTime;
+  console.log(g_seconds);;
+
+  updateAnimationAngles();
+
+  renderScene();
+
+  requestAnimationFrame(tick);
 }
 
 var g_shapesList = [];
@@ -216,6 +234,15 @@ function convertCoordinates(ev){
   return ([x,y]);
 }
 
+function updateAnimationAngles(){
+  if (g_yellowAnimation){
+    g_yellowAngle = (45*Math.sin(g_seconds));
+  }
+  if (g_magentaAnimation){
+    g_magentaAngle = (45*Math.sin(5 * g_seconds));
+  }
+}
+
 function renderScene(){
 
   // check the time at the start of this function
@@ -235,29 +262,37 @@ function renderScene(){
   // Draw the body cube
   var body = new Cube();
   body.color = [1.0,0.0,0.0,1.0];
-  body.matrix.translate(-.25,-.75,0.0);
-  body.matrix.rotate(-5,1,0,0);
-  body.matrix.scale(0.5,0.3,0.5);
+  body.matrix.translate(-0.25,-.75,-.5);
+  body.matrix.rotate(0,1,0,0);
+  body.matrix.scale(0.5,0.3,1.5);
   body.render();
 
   // Draw left arm
-  var leftArm = new Cube();
-  leftArm.color = [1,1,0,1];
-  leftArm.matrix.setTranslate(0,-.5,0.0);
-  leftArm.matrix.rotate(-g_yellowAngle,0,0,1);
-  var yellowCoordinatesMat = new Matrix4(leftArm.matrix);
-  leftArm.matrix.scale(0.25,.7,.5);
-  leftArm.matrix.translate(-.5,0,0);
-  leftArm.render();
+  var yellow = new Cube();
+  yellow.color = [1,1,0,1];
+  yellow.matrix.setTranslate(0,-.7,-.4);
+  yellow.matrix.rotate(-60,1,0,0);
+  yellow.matrix.rotate(-g_yellowAngle,0,0,1);
+  /*
+  if (g_yellowAnimation){
+    yellow.matrix.rotate(45*Math.sin(g_seconds), 0,0,1);
+  } else {
+    yellow.matrix.rotate(-g_yellowAngle,0,0,1);
+  }
+  */
+  var yellowCoordinatesMat = new Matrix4(yellow.matrix);
+  yellow.matrix.scale(0.25,.5,.25);
+  yellow.matrix.translate(-.5,0,0);
+  yellow.render();
 
-  var box = new Cube();
-  box.color = [1,0,1,1];
-  box.matrix = yellowCoordinatesMat; //translate(-.1,.1,0,0);
-  box.matrix.translate(0,0.65,0);
-  box.matrix.rotate(g_magentaAngle,0,0,1);
-  box.matrix.scale(.3,.3,.3);
-  box.matrix.translate(-.5,0,-0.001);
-  box.render();
+  var magenta = new Cube();
+  magenta.color = [1,0,1,1];
+  magenta.matrix = yellowCoordinatesMat; //translate(-.1,.1,0,0);
+  magenta.matrix.translate(0,0.65,0);
+  magenta.matrix.rotate(g_magentaAngle,0,0,1);
+  magenta.matrix.scale(.3,.3,.3);
+  magenta.matrix.translate(-.5,0,-0.001);
+  magenta.render();
 
   var duration = performance.now() - startTime;
 
