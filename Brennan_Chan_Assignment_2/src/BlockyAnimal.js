@@ -677,6 +677,21 @@ function renderScene(){
   //head.render();
   head.drawCube(head.matrix, [.5,.4,.3,1.0]);
 
+  var eye1Coord = new Matrix4(head.matrix);
+  var eye1 = new Cube();
+  eye1.color = [.5,.4,.3,1.0];
+  eye1.matrix = eye1Coord;
+  eye1.matrix.translate(0,1,.5);
+  eye1.matrix.scale(.2,.1,.2);
+  eye1.drawCube(eye1.matrix, [0,0,0,1]);
+
+  eye1.matrix.translate(4,0,0);
+  eye1.drawCube(eye1.matrix, [0,0,0,1]);
+
+  eye1.matrix.translate(-3,0,-2);
+  eye1.matrix.scale(3,1,.5);
+  eye1.drawCube(eye1.matrix, [0,0,0,1]);
+
   var spikeCoord1 = new Matrix4(head.matrix);
   // spikes
   var s1 = new Pyr();
