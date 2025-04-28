@@ -97,6 +97,9 @@ let g_selectedSize = 20;
 let g_selectedType = POINT;
 let g_selectedSeg = 10;
 let g_selectedRot = 0;
+let g_drag = false;
+let g_lastX = null;
+let g_lastY = null;
 let g_globalAngle = 45;
 
 let g_wholeAngle = 0;
@@ -109,7 +112,7 @@ let g_shoulderAngle = 0;
 //let g_shoulderAnimation = false;
 
 let g_legAngle = 0;
-//let g_letAnimation = false;
+//let g_legAnimation = false;
 
 let g_footAngle = 0;
 //let g_footAnimation = false;
@@ -143,10 +146,32 @@ function main() {
   connectVariablesToGLSL();
 
   addAllActionsForHtmlUI();
+
+  canvas.onmousedown = function(ev) {
+    g_drag = true;
+    g_lastX = ev.clientX;
+    g_lastY = ev.clientY;
+  };
+  
+  canvas.onmouseup = function(ev) {
+    g_drag = false;
+  };
+  
+  canvas.onmousemove = function(ev) {
+    if (g_drag) {
+      let diff = ev.clientX - g_lastX;
+      g_globalAngle -= diff;
+      g_lastX = ev.clientX;
+      g_lastY = ev.clientY;
+      document.getElementById('angleSlide').value = g_globalAngle;
+      renderScene();
+    }
+  };
+  
   // Register function (event handler) to be called on a mouse press
-  canvas.onmousedown = click;
+  //canvas.onmousedown = click;
   //canvas.onmousemove = click;
-  canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
+  //canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -233,7 +258,7 @@ function updateAnimationAngles(){
     g_footAngle = g_wholeAngle;
   }
   if (g_headAnimation){
-    g_headAngle = (45*Math.sin(5 * g_seconds));
+    g_headAngle = (45*Math.sin(9 * g_seconds));
   }
 }
 
@@ -553,7 +578,7 @@ function renderScene(){
   var neckOrig = new Matrix4(b1.matrix);
   // Draw neck
   var neck = new Cube();
-  neck.color = [.8,.7,.4,1.0];
+  neck.color = [.6,.55,.4,1.0];
   neck.matrix = neckOrig;
   neck.matrix.translate(.5,.5,0);
   //neck.matrix.setTranslate(0,-.7,-.4);
@@ -567,7 +592,7 @@ function renderScene(){
 
   // Head -----------------------------------------------------------------------------------------
   var head = new Cube();
-  head.color = [.5,.4,.2,1.0];
+  head.color = [.5,.4,.3,1.0]
   head.matrix = neckCoordinatesMat; //translate(-.1,.1,0,0);
   head.matrix.translate(0,.5,-.2);
   head.matrix.rotate(g_headAngle/4,1,0,0);
@@ -629,6 +654,25 @@ function renderScene(){
   s6.matrix.rotate(-90,0,0,1);
   s6.matrix.scale(0.5,.8,1);
   s6.render();
+
+  var spikeCoord7 = new Matrix4(head.matrix);
+  // spikes
+  var s7 = new Pyr();
+  s7.color = [.85,.75,.5,1.0];
+  s7.matrix = spikeCoord7;
+  s7.matrix.translate(0,0,0);
+  s7.matrix.rotate(-90,1,0,0);
+  s7.matrix.scale(0.5,.7,1);
+  s7.render();
+
+  var spikeCoord8 = new Matrix4(head.matrix);
+  var s8 = new Pyr();
+  s8.color = [.85,.75,.5,1.0];
+  s8.matrix = spikeCoord8;
+  s8.matrix.translate(0.5,0,0);
+  s8.matrix.rotate(-90,1,0,0);
+  s8.matrix.scale(0.5,.7,1);
+  s8.render();
 
 
   var duration = performance.now() - startTime;
