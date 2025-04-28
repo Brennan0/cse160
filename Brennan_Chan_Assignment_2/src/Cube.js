@@ -7,44 +7,49 @@ class Cube{
       //this.segments = 10;
       this.matrix = new Matrix4();
     }
-    render() {
-        //var xy = this.position;
-        var rgba = this.color;
-        //var size = this.size;
+    //render() {
+    //    this.drawCube();
+    //}
+  
 
-        // Pass the color of a point to u_FragColor uniform variable
-        gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+   drawCube(matrix, color){
+      //var xy = this.position;
+      var rgba = color;
+      //var size = this.size;
 
-        // Pass the matrix to u_ModelMatrix attribute
-        gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
+      // Pass the color of a point to u_FragColor uniform variable
+      gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
-        // Front of cube
-        drawTriangle3D([0.0,0.0,0.0, 1.0,1.0,0.0, 1.0,0.0,0.0]);
-        drawTriangle3D([0.0,0.0,0.0, 0.0,1.0,0.0, 1.0,1.0,0.0]);
+      // Pass the matrix to u_ModelMatrix attribute
+      gl.uniformMatrix4fv(u_ModelMatrix, false, matrix.elements);//this.matrix.elements);
 
-        // back
-        drawTriangle3D([0,0,1, 1,1,1, 1,0,1]);
-        drawTriangle3D([0,0,1, 0,1,1, 1,1,1]);
+      // Front of cube
+      drawTriangle3D([0.0,0.0,0.0, 1.0,1.0,0.0, 1.0,0.0,0.0]);
+      drawTriangle3D([0.0,0.0,0.0, 0.0,1.0,0.0, 1.0,1.0,0.0]);
 
-        // Pass the color of a point to u_FragColor uniform variable
-        gl.uniform4f(u_FragColor, rgba[0]*.85, rgba[1]*.85, rgba[2]*.85, rgba[3]);
+      // back
+      drawTriangle3D([0,0,1, 1,1,1, 1,0,1]);
+      drawTriangle3D([0,0,1, 0,1,1, 1,1,1]);
 
-        // Top of cube
-        drawTriangle3D([0,1,0, 0,1,1, 1,1,1]);
-        drawTriangle3D([0,1,0, 1,1,1, 1,1,0]);
+      // Pass the color of a point to u_FragColor uniform variable
+      gl.uniform4f(u_FragColor, rgba[0]*.85, rgba[1]*.85, rgba[2]*.85, rgba[3]);
 
-        //bottom
-        drawTriangle3D([0,0,0, 0,0,1, 1,0,1]);
-        drawTriangle3D([0,0,0, 1,0,1, 1,0,0]);
+      // Top of cube
+      drawTriangle3D([0,1,0, 0,1,1, 1,1,1]);
+      drawTriangle3D([0,1,0, 1,1,1, 1,1,0]);
 
-        gl.uniform4f(u_FragColor, rgba[0]*.75, rgba[1]*.75, rgba[2]*.75, rgba[3]);
+      //bottom
+      drawTriangle3D([0,0,0, 0,0,1, 1,0,1]);
+      drawTriangle3D([0,0,0, 1,0,1, 1,0,0]);
 
-        // left side
-        drawTriangle3D([0,0,0, 0,0,1, 0,1,1]);
-        drawTriangle3D([0,0,0, 0,1,0, 0,1,1]);
+      gl.uniform4f(u_FragColor, rgba[0]*.75, rgba[1]*.75, rgba[2]*.75, rgba[3]);
 
-        // right side
-        drawTriangle3D([1,0,0, 1,0,1, 1,1,1]);
-        drawTriangle3D([1,0,0, 1,1,0, 1,1,1]);
+      // left side
+      drawTriangle3D([0,0,0, 0,0,1, 0,1,1]);
+      drawTriangle3D([0,0,0, 0,1,0, 0,1,1]);
+
+      // right side
+      drawTriangle3D([1,0,0, 1,0,1, 1,1,1]);
+      drawTriangle3D([1,0,0, 1,1,0, 1,1,1]);
     }    
-}
+  }

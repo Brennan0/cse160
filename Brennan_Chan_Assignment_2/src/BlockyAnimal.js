@@ -283,7 +283,8 @@ function renderScene(){
   b1.matrix.rotate(g_wholeAngle/4,0,1,0);
   b1.matrix.scale(0.5,0.3,.3);
   var b1Coord = new Matrix4(b1.matrix);
-  b1.render();
+  //b1.render();
+  b1.drawCube(b1.matrix,[.5,.4,.3,1.0]);
 
 
   var shoulder1 = new Matrix4(b1.matrix);
@@ -295,7 +296,8 @@ function renderScene(){
   fleg1.matrix.rotate(g_shoulderAngle/4,0,0,1);
   fleg1.matrix.scale(0.3,0.3,.3);
   var fleg1Coord = new Matrix4(fleg1.matrix);
-  fleg1.render();
+  //fleg1.render();
+  fleg1.drawCube(fleg1.matrix,[.6,.55,.4,1.0]);
 
   var fleg1a = new Cube();
   fleg1a.color = [.6,.55,.4,1.0];
@@ -305,7 +307,8 @@ function renderScene(){
   fleg1a.matrix.rotate(g_legAngle/3,0,1,0);
   fleg1a.matrix.scale(1.5,.4,.5);
   var fleg1aCoord = new Matrix4(fleg1a.matrix);
-  fleg1a.render();
+  //fleg1a.render();
+  fleg1a.drawCube(fleg1a.matrix,[.6,.55,.4,1.0]);
 
   var foot1 = new Cube();
   foot1.color = [.6,.55,.4,1.0];
@@ -314,7 +317,8 @@ function renderScene(){
   foot1.matrix.rotate(90,0,1,0);
   foot1.matrix.rotate(g_footAngle/7,0,1,0);
   foot1.matrix.scale(2.5,2,.3);
-  foot1.render();
+  //foot1.render();
+  foot1.drawCube(foot1.matrix,[.6,.55,.4,1.0]);
 
   var shoulder2 = new Matrix4(b1.matrix);
   
@@ -325,7 +329,8 @@ function renderScene(){
   fleg2.matrix.rotate(g_shoulderAngle/4,0,0,1);
   fleg2.matrix.scale(0.3,0.3,.3);
   var fleg2Coord = new Matrix4(fleg2.matrix);
-  fleg2.render();
+  //fleg2.render();
+  fleg2.drawCube(fleg2.matrix,[.6,.55,.4,1.0]);
 
   var fleg2a = new Cube();
   fleg2a.color = [.6,.55,.4,1.0];
@@ -335,7 +340,8 @@ function renderScene(){
   fleg2a.matrix.rotate(-g_legAngle/3,0,1,0);
   fleg2a.matrix.scale(1.5,.4,.5);
   var fleg2aCoord = new Matrix4(fleg2a.matrix);
-  fleg2a.render();
+  //fleg2a.render();
+  fleg2a.drawCube(fleg2a.matrix,[.6,.55,.4,1.0]);
 
   var foot2 = new Cube();
   foot2.color = [.6,.55,.4,1.0];
@@ -344,7 +350,8 @@ function renderScene(){
   foot2.matrix.rotate(90,0,1,0);
   foot2.matrix.rotate(g_footAngle/7,0,1,0);
   foot2.matrix.scale(2.5,2,.3);
-  foot2.render();
+  //foot2.render();
+  foot2.drawCube(foot2.matrix,[.6,.55,.4,1.0]);
 
   var spikeCoord1 = new Matrix4(b1.matrix);
   // spikes
@@ -354,7 +361,8 @@ function renderScene(){
   s1.matrix.translate(0,1,0);
   s1.matrix.rotate(0,1,0,0);
   s1.matrix.scale(0.5,1,1);
-  s1.render();
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord2 = new Matrix4(b1.matrix);
   var s2 = new Pyr();
@@ -363,7 +371,8 @@ function renderScene(){
   s2.matrix.translate(0.5,1,0);
   s2.matrix.rotate(0,1,0,0);
   s2.matrix.scale(0.5,1,1);
-  s2.render();
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord3 = new Matrix4(b1.matrix);
   var s3 = new Pyr();
@@ -372,7 +381,8 @@ function renderScene(){
   s3.matrix.translate(1,1,0);
   s3.matrix.rotate(-90,0,0,1);
   s3.matrix.scale(0.5,.4,1);
-  s3.render();
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord4 = new Matrix4(b1.matrix);
   var s4 = new Pyr();
@@ -381,7 +391,8 @@ function renderScene(){
   s4.matrix.translate(0,0.5,0);
   s4.matrix.rotate(90,0,0,1);
   s4.matrix.scale(0.5,.4,1);
-  s4.render();
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
 
 
   // Draw Body section 2 --------------------------------------------------------------------------
@@ -392,7 +403,8 @@ function renderScene(){
   b2.matrix.rotate(-g_wholeAngle/3,0,1,0);
   b2.matrix.scale(.8,.9,1);
   var b2Coord = new Matrix4(b2.matrix);
-  b2.render();
+  //b2.render();
+  b2.drawCube(b2.matrix,[.5,.4,.3,1.0]);
 
   var spikeCoord1 = new Matrix4(b2.matrix);
   // spikes
@@ -402,7 +414,8 @@ function renderScene(){
   s1.matrix.translate(0,1,0);
   s1.matrix.rotate(0,1,0,0);
   s1.matrix.scale(0.5,1,1);
-  s1.render();
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord2 = new Matrix4(b2.matrix);
   var s2 = new Pyr();
@@ -411,7 +424,8 @@ function renderScene(){
   s2.matrix.translate(0.5,1,0);
   s2.matrix.rotate(0,1,0,0);
   s2.matrix.scale(0.5,1,1);
-  s2.render();
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord3 = new Matrix4(b2.matrix);
   var s3 = new Pyr();
@@ -420,7 +434,8 @@ function renderScene(){
   s3.matrix.translate(1,1,0);
   s3.matrix.rotate(-90,0,0,1);
   s3.matrix.scale(0.5,.4,1);
-  s3.render();
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord4 = new Matrix4(b2.matrix);
   var s4 = new Pyr();
@@ -429,7 +444,8 @@ function renderScene(){
   s4.matrix.translate(0,0.5,0);
   s4.matrix.rotate(90,0,0,1);
   s4.matrix.scale(0.5,.4,1);
-  s4.render();
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord5 = new Matrix4(b2.matrix);
   var s5 = new Pyr();
@@ -438,7 +454,8 @@ function renderScene(){
   s5.matrix.translate(0,0,0);
   s5.matrix.rotate(90,0,0,1);
   s5.matrix.scale(0.5,.4,1);
-  s5.render();
+  //s5.render();
+  s5.drawPyr(s5.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord6 = new Matrix4(b2.matrix);
   var s6 = new Pyr();
@@ -447,7 +464,8 @@ function renderScene(){
   s6.matrix.translate(1,.5,0);
   s6.matrix.rotate(-90,0,0,1);
   s6.matrix.scale(0.5,.4,1);
-  s6.render();
+  //s6.render();
+  s6.drawPyr(s6.matrix, [.85,.75,.5,1.0]);
 
   
 
@@ -459,7 +477,9 @@ function renderScene(){
   b3.matrix.rotate(g_wholeAngle/2,0,1,0);
   b3.matrix.scale(.8,.9,.9);
   var b3Coord = new Matrix4(b3.matrix);
-  b3.render();
+  //b3.render();
+  b3.drawCube(b3.matrix,[.5,.4,.3,1.0]);
+
 
   // Shoulder 3
   var shoulder3 = new Matrix4(b3.matrix);
@@ -472,7 +492,8 @@ function renderScene(){
   rleg1.matrix.rotate(g_shoulderAngle/4,0,0,1);
   rleg1.matrix.scale(0.3,0.3,.3);
   var rleg1Coord = new Matrix4(rleg1.matrix);
-  rleg1.render();
+  //rleg1.render();
+  rleg1.drawCube(rleg1.matrix,[.6,.55,.4,1.0]);
 
   var rleg1a = new Cube();
   rleg1a.color = [.6,.55,.4,1.0];
@@ -482,7 +503,8 @@ function renderScene(){
   rleg1a.matrix.rotate(g_legAngle/3,0,1,0);
   rleg1a.matrix.scale(1.5,.4,.5);
   var rleg1aCoord = new Matrix4(rleg1a.matrix);
-  rleg1a.render();
+  //rleg1a.render();
+  rleg1a.drawCube(rleg1a.matrix,[.6,.55,.4,1.0]);
 
   var foot3 = new Cube();
   foot3.color = [.6,.55,.4,1.0];
@@ -491,13 +513,13 @@ function renderScene(){
   foot3.matrix.rotate(90,0,1,0);
   foot3.matrix.rotate(g_footAngle/7,0,1,0);
   foot3.matrix.scale(2.5,2,.3);
-  foot3.render();
+  //foot3.render();
+  foot3.drawCube(foot3.matrix,[.6,.55,.4,1.0]);
 
 
 
   // shoulder 4
   var shoulder4 = new Matrix4(b3.matrix);
-  
   var rleg2 = new Cube();
   rleg2.color = [.6,.55,.4,1.0];
   rleg2.matrix = shoulder4;
@@ -506,7 +528,8 @@ function renderScene(){
   rleg2.matrix.rotate(g_shoulderAngle/4,0,0,1);
   rleg2.matrix.scale(0.3,0.3,.3);
   var rleg2Coord = new Matrix4(rleg2.matrix);
-  rleg2.render();
+  //rleg2.render();
+  rleg2.drawCube(rleg2.matrix,[.6,.55,.4,1.0]);
 
   var rleg2a = new Cube();
   rleg2a.color = [.6,.55,.4,1.0];
@@ -516,7 +539,8 @@ function renderScene(){
   rleg2a.matrix.rotate(-g_legAngle/3,0,1,0);
   rleg2a.matrix.scale(1.5,.4,.5);
   var rleg2aCoord = new Matrix4(rleg2a.matrix);
-  rleg2a.render();
+  //rleg2a.render();
+  rleg2a.drawCube(rleg2a.matrix,[.6,.55,.4,1.0]);
 
   var foot4 = new Cube();
   foot4.color = [.6,.55,.4,1.0];
@@ -525,7 +549,8 @@ function renderScene(){
   foot4.matrix.rotate(90,0,1,0);
   foot4.matrix.rotate(g_footAngle/7,0,1,0);
   foot4.matrix.scale(2.5,2,.3);
-  foot4.render();
+  //foot4.render();
+  foot4.drawCube(foot4.matrix,[.6,.55,.4,1.0]);
 
   var spikeCoord1 = new Matrix4(b3.matrix);
   // spikes
@@ -535,7 +560,9 @@ function renderScene(){
   s1.matrix.translate(0,1,0);
   s1.matrix.rotate(0,1,0,0);
   s1.matrix.scale(0.5,1,1);
-  s1.render();
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
+  
 
   var spikeCoord2 = new Matrix4(b3.matrix);
   var s2 = new Pyr();
@@ -544,7 +571,8 @@ function renderScene(){
   s2.matrix.translate(0.5,1,0);
   s2.matrix.rotate(0,1,0,0);
   s2.matrix.scale(0.5,1,1);
-  s2.render();
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord3 = new Matrix4(b3.matrix);
   var s3 = new Pyr();
@@ -553,7 +581,8 @@ function renderScene(){
   s3.matrix.translate(1,1,0);
   s3.matrix.rotate(-90,0,0,1);
   s3.matrix.scale(0.5,.4,1);
-  s3.render();
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord4 = new Matrix4(b3.matrix);
   var s4 = new Pyr();
@@ -562,7 +591,8 @@ function renderScene(){
   s4.matrix.translate(0,0.5,0);
   s4.matrix.rotate(90,0,0,1);
   s4.matrix.scale(0.5,.4,1);
-  s4.render();
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
 
   // Draw Tail
   var tail = new Pyr();
@@ -571,7 +601,8 @@ function renderScene(){
   tail.matrix.translate(0.1,.9,1);
   tail.matrix.rotate(90,1,0,0);
   tail.matrix.scale(.8,4,.9);
-  tail.render();
+  //tail.render();
+  tail.drawPyr(tail.matrix, [.85,.75,.5,1.0]);
 
 
   // Neck -----------------------------------------------------------------------------------------
@@ -584,21 +615,22 @@ function renderScene(){
   //neck.matrix.setTranslate(0,-.7,-.4);
   neck.matrix.rotate(-60,1,0,0);
   neck.matrix.rotate(-g_wholeAngle/2,0,0,1);
-  
   var neckCoordinatesMat = new Matrix4(neck.matrix);
   neck.matrix.scale(.3,.6,.3);
   neck.matrix.translate(-.5,0,0);
-  neck.render();
+  //neck.render();
+  neck.drawCube(neck.matrix, [.6,.55,.4,1.0]);
 
   // Head -----------------------------------------------------------------------------------------
   var head = new Cube();
-  head.color = [.5,.4,.3,1.0]
+  head.color = [.5,.4,.3,1.0];
   head.matrix = neckCoordinatesMat; //translate(-.1,.1,0,0);
   head.matrix.translate(0,.5,-.2);
   head.matrix.rotate(g_headAngle/4,1,0,0);
   head.matrix.scale(.6,.6,.6);
   head.matrix.translate(-.5,0,-0.001);
-  head.render();
+  //head.render();
+  head.drawCube(head.matrix, [.5,.4,.3,1.0]);
 
   var spikeCoord1 = new Matrix4(head.matrix);
   // spikes
@@ -608,7 +640,8 @@ function renderScene(){
   s1.matrix.translate(0,1,1);
   s1.matrix.rotate(90,1,0,0);
   s1.matrix.scale(0.5,1,1);
-  s1.render();
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord2 = new Matrix4(head.matrix);
   var s2 = new Pyr();
@@ -617,7 +650,8 @@ function renderScene(){
   s2.matrix.translate(0.5,1,1);
   s2.matrix.rotate(90,1,0,0);
   s2.matrix.scale(0.5,1,1);
-  s2.render();
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord3 = new Matrix4(head.matrix);
   var s3 = new Pyr();
@@ -626,7 +660,8 @@ function renderScene(){
   s3.matrix.translate(1,1,0);
   s3.matrix.rotate(-90,0,0,1);
   s3.matrix.scale(0.5,.4,1);
-  s3.render();
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord4 = new Matrix4(head.matrix);
   var s4 = new Pyr();
@@ -635,7 +670,8 @@ function renderScene(){
   s4.matrix.translate(0,0.5,0);
   s4.matrix.rotate(90,0,0,1);
   s4.matrix.scale(0.5,.4,1);
-  s4.render();
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord5 = new Matrix4(head.matrix);
   var s5 = new Pyr();
@@ -644,7 +680,8 @@ function renderScene(){
   s5.matrix.translate(0,0,0);
   s5.matrix.rotate(90,0,0,1);
   s5.matrix.scale(0.5,.8,1);
-  s5.render();
+  //s5.render();
+  s5.drawPyr(s5.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord6 = new Matrix4(head.matrix);
   var s6 = new Pyr();
@@ -653,7 +690,8 @@ function renderScene(){
   s6.matrix.translate(1,.5,0);
   s6.matrix.rotate(-90,0,0,1);
   s6.matrix.scale(0.5,.8,1);
-  s6.render();
+  //s6.render();
+  s6.drawPyr(s6.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord7 = new Matrix4(head.matrix);
   // spikes
@@ -663,7 +701,8 @@ function renderScene(){
   s7.matrix.translate(0,0,0);
   s7.matrix.rotate(-90,1,0,0);
   s7.matrix.scale(0.5,.7,1);
-  s7.render();
+  //s7.render();
+  s7.drawPyr(s7.matrix, [.85,.75,.5,1.0]);
 
   var spikeCoord8 = new Matrix4(head.matrix);
   var s8 = new Pyr();
@@ -672,7 +711,8 @@ function renderScene(){
   s8.matrix.translate(0.5,0,0);
   s8.matrix.rotate(-90,1,0,0);
   s8.matrix.scale(0.5,.7,1);
-  s8.render();
+  //s8.render();
+  s8.drawPyr(s8.matrix, [.85,.75,.5,1.0]);
 
 
   var duration = performance.now() - startTime;
