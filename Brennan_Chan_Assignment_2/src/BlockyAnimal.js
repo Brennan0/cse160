@@ -97,9 +97,14 @@ let g_selectedSize = 20;
 let g_selectedType = POINT;
 let g_selectedSeg = 10;
 let g_selectedRot = 0;
+
+let g_pokeStartTime = 0;
+let g_pokeAnimation = false;
+
 let g_drag = false;
 let g_lastX = null;
 let g_lastY = null;
+
 let g_globalAngle = 45;
 
 let g_wholeAngle = 0;
@@ -148,9 +153,14 @@ function main() {
   addAllActionsForHtmlUI();
 
   canvas.onmousedown = function(ev) {
+    if (ev.shiftKey){
+      g_pokeAnimation = true;
+      g_pokeStartTime = performance.now()/1000.0;
+    }else{
     g_drag = true;
     g_lastX = ev.clientX;
     g_lastY = ev.clientY;
+    }
   };
   
   canvas.onmouseup = function(ev) {
@@ -169,9 +179,7 @@ function main() {
   };
   
   // Register function (event handler) to be called on a mouse press
-  //canvas.onmousedown = click;
-  //canvas.onmousemove = click;
-  //canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
+
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -189,8 +197,11 @@ function tick(){
   g_seconds = performance.now()/1000.0-g_startTime;
   console.log(g_seconds);;
 
-  updateAnimationAngles();
-
+  if (g_pokeAnimation){
+    poke();
+  } else {
+    updateAnimationAngles();
+  }
   renderScene();
 
   requestAnimationFrame(tick);
@@ -262,6 +273,18 @@ function updateAnimationAngles(){
   }
 }
 
+function poke(){
+  let timePassed = performance.now()/1000.0 - g_pokeStartTime;
+  if (timePassed < 5){
+    g_shoulderAngle = (90 * Math.sin(30*timePassed));
+    g_headAngle = (100 * Math.sin(30 *timePassed));
+  }else{
+    g_pokeAnimation = false;
+    g_wholeAngle = 0;
+    g_headAngle = 0;
+  }
+}
+
 function renderScene(){
 
   // check the time at the start of this function
@@ -293,7 +316,11 @@ function renderScene(){
   fleg1.color = [.6,.55,.4,1.0];
   fleg1.matrix = shoulder1;
   fleg1.matrix.translate(1,.1,0.3);
+  if(g_pokeAnimation){
+    fleg1.matrix.rotate(g_shoulderAngle,1,0,0);
+  }else{
   fleg1.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  }
   fleg1.matrix.scale(0.3,0.3,.3);
   var fleg1Coord = new Matrix4(fleg1.matrix);
   //fleg1.render();
@@ -326,7 +353,12 @@ function renderScene(){
   fleg2.color = [.6,.55,.4,1.0];
   fleg2.matrix = shoulder2;
   fleg2.matrix.translate(-.3,.1,0.3);
-  fleg2.matrix.rotate(g_shoulderAngle/4,0,0,1);
+
+  if(g_pokeAnimation){
+    fleg2.matrix.rotate(-g_shoulderAngle,1,0,0);
+  }else{
+  fleg2.matrix.rotate(-g_shoulderAngle/4,0,0,1);
+  }
   fleg2.matrix.scale(0.3,0.3,.3);
   var fleg2Coord = new Matrix4(fleg2.matrix);
   //fleg2.render();
@@ -489,7 +521,11 @@ function renderScene(){
   rleg1.matrix = shoulder3;
   rleg1.matrix.translate(1,.1,0.3);
   //fleg3.matrix.rotate(0,0,1,0);
-  rleg1.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  if(g_pokeAnimation){
+    rleg1.matrix.rotate(-g_shoulderAngle,1,0,0);
+  }else{
+    rleg1.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  }
   rleg1.matrix.scale(0.3,0.3,.3);
   var rleg1Coord = new Matrix4(rleg1.matrix);
   //rleg1.render();
@@ -525,7 +561,11 @@ function renderScene(){
   rleg2.matrix = shoulder4;
   rleg2.matrix.translate(-.3,.1,0.3);
   //fleg4.matrix.rotate(0,0,1,0);
-  rleg2.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  if(g_pokeAnimation){
+    rleg2.matrix.rotate(g_shoulderAngle,1,0,0);
+  }else{
+    rleg2.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  }
   rleg2.matrix.scale(0.3,0.3,.3);
   var rleg2Coord = new Matrix4(rleg2.matrix);
   //rleg2.render();
@@ -626,7 +666,12 @@ function renderScene(){
   head.color = [.5,.4,.3,1.0];
   head.matrix = neckCoordinatesMat; //translate(-.1,.1,0,0);
   head.matrix.translate(0,.5,-.2);
-  head.matrix.rotate(g_headAngle/4,1,0,0);
+  //head.matrix.rotate(g_headAngle/4,1,0,0);
+  if(g_pokeAnimation){
+    head.matrix.rotate(g_headAngle,0,0,1);
+  }else{
+    head.matrix.rotate(g_headAngle/4,1,0,0);
+  }
   head.matrix.scale(.6,.6,.6);
   head.matrix.translate(-.5,0,-0.001);
   //head.render();
