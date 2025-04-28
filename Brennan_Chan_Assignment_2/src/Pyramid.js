@@ -8,7 +8,7 @@ class Pyr{
       this.matrix = new Matrix4();
     }
   
-  drawPyr(matrix, color){
+  drawPyr(matrix, color){ // render(){
         //var xy = this.position;
         var rgba = color;//this.color;
         //var size = this.size;
