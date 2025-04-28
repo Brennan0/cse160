@@ -250,53 +250,252 @@ function renderScene(){
 
   // Pass the matrix to u_ModelMatrix attribute
   var globalRotMat = new Matrix4().rotate(g_globalAngle,0,1,0);
+  //globalRotMat.rotate(-25,1,0,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  // Draw a test triangle
-  //drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 0.0,0.0,0.0]);
-  var pyr = new Pyr();
-  pyr.color = [1.0,0.0,0.0,1.0];
-  pyr.matrix.translate(0,0,0);
-  pyr.matrix.rotate(34,1,0,0);
-  pyr.matrix.scale(0.5,0.5,0.5);
-  pyr.render();
+  // Draw Body section 1 --------------------------------------------------------------------------
+  var b1 = new Cube();
+  b1.color = [.5,.4,.3,1.0];
+  b1.matrix.translate(-0.25,-.75,-.5);
+  b1.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  b1.matrix.scale(0.5,0.3,.3);
+  var b1Coord = new Matrix4(b1.matrix);
+  b1.render();
 
-  // Draw the body cube
-  var body = new Cube();
-  body.color = [1.0,0.0,0.0,1.0];
-  body.matrix.translate(-0.25,-.75,-.5);
-  body.matrix.rotate(0,1,0,0);
-  body.matrix.scale(0.5,0.3,1);
-  body.render();
 
+  var l1 = new Matrix4(b1.matrix);
+  
+  var fleg1 = new Cube();
+  fleg1.color = [.6,.55,.4,1.0];
+  fleg1.matrix = l1;
+  fleg1.matrix.translate(1,.1,0.3);
+  fleg1.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg1.matrix.scale(0.3,0.3,.3);
+  var fleg1Coord = new Matrix4(fleg1.matrix);
+  fleg1.render();
+
+  var l2 = new Matrix4(b1.matrix);
+  
+  var fleg2 = new Cube();
+  fleg2.color = [.6,.55,.4,1.0];
+  fleg2.matrix = l2;
+  fleg2.matrix.translate(-.3,.1,0.3);
+  fleg2.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg2.matrix.scale(0.3,0.3,.3);
+  var fleg2Coord = new Matrix4(fleg2.matrix);
+  fleg2.render();
+
+
+  var spikeCoord1 = new Matrix4(b1.matrix);
+  // spikes
+  var s1 = new Pyr();
+  s1.color = [.85,.75,.5,1.0];
+  s1.matrix = spikeCoord1;
+  s1.matrix.translate(0,1,0);
+  s1.matrix.rotate(0,1,0,0);
+  s1.matrix.scale(0.5,1,1);
+  s1.render();
+
+  var spikeCoord2 = new Matrix4(b1.matrix);
+  var s2 = new Pyr();
+  s2.color = [.85,.75,.5,1.0];
+  s2.matrix = spikeCoord2;
+  s2.matrix.translate(0.5,1,0);
+  s2.matrix.rotate(0,1,0,0);
+  s2.matrix.scale(0.5,1,1);
+  s2.render();
+
+  var spikeCoord3 = new Matrix4(b1.matrix);
+  var s3 = new Pyr();
+  s3.color = [.85,.75,.5,1.0];
+  s3.matrix = spikeCoord3;
+  s3.matrix.translate(1,1,0);
+  s3.matrix.rotate(-90,0,0,1);
+  s3.matrix.scale(0.5,.4,1);
+  s3.render();
+
+  var spikeCoord4 = new Matrix4(b1.matrix);
+  var s4 = new Pyr();
+  s4.color = [.85,.75,.5,1.0];
+  s4.matrix = spikeCoord4;
+  s4.matrix.translate(0,0.5,0);
+  s4.matrix.rotate(90,0,0,1);
+  s4.matrix.scale(0.5,.4,1);
+  s4.render();
+
+
+  // Draw Body section 2 --------------------------------------------------------------------------
+  var b2 = new Cube();
+  b2.color = [.5,.4,.3,1.0];
+  b2.matrix = b1Coord;
+  b2.matrix.translate(0.1,0,1);
+  b2.matrix.rotate(-g_neckAngle/2,0,1,0);
+  b2.matrix.scale(.8,.9,1);
+  var b2Coord = new Matrix4(b2.matrix);
+  b2.render();
+
+  var spikeCoord1 = new Matrix4(b2.matrix);
+  // spikes
+  var s1 = new Pyr();
+  s1.color = [.85,.75,.5,1.0];
+  s1.matrix = spikeCoord1;
+  s1.matrix.translate(0,1,0);
+  s1.matrix.rotate(0,1,0,0);
+  s1.matrix.scale(0.5,1,1);
+  s1.render();
+
+  var spikeCoord2 = new Matrix4(b2.matrix);
+  var s2 = new Pyr();
+  s2.color = [.85,.75,.5,1.0];
+  s2.matrix = spikeCoord2;
+  s2.matrix.translate(0.5,1,0);
+  s2.matrix.rotate(0,1,0,0);
+  s2.matrix.scale(0.5,1,1);
+  s2.render();
+
+  var spikeCoord3 = new Matrix4(b2.matrix);
+  var s3 = new Pyr();
+  s3.color = [.85,.75,.5,1.0];
+  s3.matrix = spikeCoord3;
+  s3.matrix.translate(1,1,0);
+  s3.matrix.rotate(-90,0,0,1);
+  s3.matrix.scale(0.5,.4,1);
+  s3.render();
+
+  var spikeCoord4 = new Matrix4(b2.matrix);
+  var s4 = new Pyr();
+  s4.color = [.85,.75,.5,1.0];
+  s4.matrix = spikeCoord4;
+  s4.matrix.translate(0,0.5,0);
+  s4.matrix.rotate(90,0,0,1);
+  s4.matrix.scale(0.5,.4,1);
+  s4.render();
+
+  var spikeCoord5 = new Matrix4(b2.matrix);
+  var s5 = new Pyr();
+  s5.color = [.85,.75,.5,1.0];
+  s5.matrix = spikeCoord5;
+  s5.matrix.translate(0,0,0);
+  s5.matrix.rotate(90,0,0,1);
+  s5.matrix.scale(0.5,.4,1);
+  s5.render();
+
+  var spikeCoord6 = new Matrix4(b2.matrix);
+  var s6 = new Pyr();
+  s6.color = [.85,.75,.5,1.0];
+  s6.matrix = spikeCoord6;
+  s6.matrix.translate(1,.5,0);
+  s6.matrix.rotate(-90,0,0,1);
+  s6.matrix.scale(0.5,.4,1);
+  s6.render();
+
+  
+
+  // Draw Body section 3 --------------------------------------------------------------------------
+  var b3 = new Cube();
+  b3.color = [.5,.4,.3,1.0];
+  b3.matrix = b2Coord;
+  b3.matrix.translate(0.1,0,1);
+  b3.matrix.rotate(g_neckAngle/1,0,1,0);
+  b3.matrix.scale(.8,.9,.9);
+  var b3Coord = new Matrix4(b3.matrix);
+  b3.render();
+
+
+  var l3 = new Matrix4(b3.matrix);
+  
+  var fleg3 = new Cube();
+  fleg3.color = [.6,.55,.4,1.0];
+  fleg3.matrix = l3;
+  fleg3.matrix.translate(1,.1,0.3);
+  fleg3.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg3.matrix.scale(0.3,0.3,.3);
+  var fleg3Coord = new Matrix4(fleg3.matrix);
+  fleg3.render();
+
+  var l4 = new Matrix4(b3.matrix);
+  
+  var fleg4 = new Cube();
+  fleg4.color = [.6,.55,.4,1.0];
+  fleg4.matrix = l4;
+  fleg4.matrix.translate(-.3,.1,0.3);
+  fleg4.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg4.matrix.scale(0.3,0.3,.3);
+  var fleg4Coord = new Matrix4(fleg4.matrix);
+  fleg4.render();
+
+  var spikeCoord1 = new Matrix4(b3.matrix);
+  // spikes
+  var s1 = new Pyr();
+  s1.color = [.85,.75,.5,1.0];
+  s1.matrix = spikeCoord1;
+  s1.matrix.translate(0,1,0);
+  s1.matrix.rotate(0,1,0,0);
+  s1.matrix.scale(0.5,1,1);
+  s1.render();
+
+  var spikeCoord2 = new Matrix4(b3.matrix);
+  var s2 = new Pyr();
+  s2.color = [.85,.75,.5,1.0];
+  s2.matrix = spikeCoord2;
+  s2.matrix.translate(0.5,1,0);
+  s2.matrix.rotate(0,1,0,0);
+  s2.matrix.scale(0.5,1,1);
+  s2.render();
+
+  var spikeCoord3 = new Matrix4(b3.matrix);
+  var s3 = new Pyr();
+  s3.color = [.85,.75,.5,1.0];
+  s3.matrix = spikeCoord3;
+  s3.matrix.translate(1,1,0);
+  s3.matrix.rotate(-90,0,0,1);
+  s3.matrix.scale(0.5,.4,1);
+  s3.render();
+
+  var spikeCoord4 = new Matrix4(b3.matrix);
+  var s4 = new Pyr();
+  s4.color = [.85,.75,.5,1.0];
+  s4.matrix = spikeCoord4;
+  s4.matrix.translate(0,0.5,0);
+  s4.matrix.rotate(90,0,0,1);
+  s4.matrix.scale(0.5,.4,1);
+  s4.render();
+
+  // Draw Tail
+  var tail = new Pyr();
+  tail.color = [.85,.75,.5,1.0];
+  tail.matrix = b3Coord;
+  tail.matrix.translate(0.1,.9,1);
+  tail.matrix.rotate(90,1,0,0);
+  tail.matrix.scale(.8,4,.9);
+  tail.render();
+
+
+  var neckOrig = new Matrix4(b1.matrix);
   // Draw left arm
   var neck = new Cube();
-  neck.color = [1,1,0,1];
-  neck.matrix.setTranslate(0,-.7,-.4);
+  neck.color = [.8,.7,.4,1.0];
+  neck.matrix = neckOrig;
+  neck.matrix.translate(.5,.5,0);
+  //neck.matrix.setTranslate(0,-.7,-.4);
   neck.matrix.rotate(-60,1,0,0);
-  neck.matrix.rotate(-g_neckAngle,0,0,1);
-  /*
-  if (g_yellowAnimation){
-    yellow.matrix.rotate(45*Math.sin(g_seconds), 0,0,1);
-  } else {
-    yellow.matrix.rotate(-g_yellowAngle,0,0,1);
-  }
-  */
+  neck.matrix.rotate(-g_neckAngle/2,0,0,1);
+  
   var neckCoordinatesMat = new Matrix4(neck.matrix);
-  neck.matrix.scale(0.2,.3,.25);
+  neck.matrix.scale(.3,.6,.3);
   neck.matrix.translate(-.5,0,0);
   neck.render();
 
   var magenta = new Cube();
-  magenta.color = [1,0,1,1];
+  magenta.color = [.5,.4,.2,1.0];
   magenta.matrix = neckCoordinatesMat; //translate(-.1,.1,0,0);
-  magenta.matrix.translate(0,0.3,-.025);
-  magenta.matrix.rotate(g_magentaAngle,0,0,1);
-  magenta.matrix.scale(.3,.3,.3);
+  magenta.matrix.translate(0,.5,-.2);
+  magenta.matrix.rotate(g_magentaAngle/4,1,0,0);
+  magenta.matrix.scale(.6,.6,.6);
   magenta.matrix.translate(-.5,0,-0.001);
   magenta.render();
 
