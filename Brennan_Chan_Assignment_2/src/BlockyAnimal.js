@@ -261,34 +261,71 @@ function renderScene(){
   var b1 = new Cube();
   b1.color = [.5,.4,.3,1.0];
   b1.matrix.translate(-0.25,-.75,-.5);
-  b1.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  b1.matrix.rotate(g_neckAngle/4,0,1,0);
   b1.matrix.scale(0.5,0.3,.3);
   var b1Coord = new Matrix4(b1.matrix);
   b1.render();
 
 
-  var l1 = new Matrix4(b1.matrix);
+  var shoulder1 = new Matrix4(b1.matrix);
   
   var fleg1 = new Cube();
   fleg1.color = [.6,.55,.4,1.0];
-  fleg1.matrix = l1;
+  fleg1.matrix = shoulder1;
   fleg1.matrix.translate(1,.1,0.3);
-  fleg1.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg1.matrix.rotate(g_neckAngle/4,0,0,1);
   fleg1.matrix.scale(0.3,0.3,.3);
   var fleg1Coord = new Matrix4(fleg1.matrix);
   fleg1.render();
 
-  var l2 = new Matrix4(b1.matrix);
+  var fleg1a = new Cube();
+  fleg1a.color = [.6,.55,.4,1.0];
+  fleg1a.matrix = fleg1Coord;
+  fleg1a.matrix.translate(.5,.01,0.25);
+  fleg1a.matrix.rotate(-90,0,0,1);
+  fleg1a.matrix.rotate(g_neckAngle/3,0,1,0);
+  fleg1a.matrix.scale(1.5,.4,.5);
+  var fleg1aCoord = new Matrix4(fleg1a.matrix);
+  fleg1a.render();
+
+  var foot1 = new Cube();
+  foot1.color = [.6,.55,.4,1.0];
+  foot1.matrix = fleg1aCoord;
+  foot1.matrix.translate(.8,-.2,.9);
+  foot1.matrix.rotate(90,0,1,0);
+  foot1.matrix.rotate(g_neckAngle/7,0,1,0);
+  foot1.matrix.scale(2.5,2,.3);
+  foot1.render();
+
+  var shoulder2 = new Matrix4(b1.matrix);
   
   var fleg2 = new Cube();
   fleg2.color = [.6,.55,.4,1.0];
-  fleg2.matrix = l2;
+  fleg2.matrix = shoulder2;
   fleg2.matrix.translate(-.3,.1,0.3);
-  fleg2.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg2.matrix.rotate(g_neckAngle/4,0,0,1);
   fleg2.matrix.scale(0.3,0.3,.3);
   var fleg2Coord = new Matrix4(fleg2.matrix);
   fleg2.render();
 
+  var fleg2a = new Cube();
+  fleg2a.color = [.6,.55,.4,1.0];
+  fleg2a.matrix = fleg2Coord;
+  fleg2a.matrix.translate(0.08,.01,0.25);
+  fleg2a.matrix.rotate(-90,0,0,1);
+  fleg2a.matrix.rotate(-g_neckAngle/3,0,1,0);
+  fleg2a.matrix.scale(1.5,.4,.5);
+  var fleg2aCoord = new Matrix4(fleg2a.matrix);
+  fleg2a.render();
+
+  var foot2 = new Cube();
+  foot2.color = [.6,.55,.4,1.0];
+  foot2.matrix = fleg2aCoord;
+  foot2.matrix.translate(.8,-.8,.9);
+  foot2.matrix.rotate(90,0,1,0);
+  foot2.matrix.rotate(g_neckAngle/7,0,1,0);
+  foot2.matrix.scale(2.5,2,.3);
+  foot2.render();
 
   var spikeCoord1 = new Matrix4(b1.matrix);
   // spikes
@@ -333,7 +370,7 @@ function renderScene(){
   b2.color = [.5,.4,.3,1.0];
   b2.matrix = b1Coord;
   b2.matrix.translate(0.1,0,1);
-  b2.matrix.rotate(-g_neckAngle/2,0,1,0);
+  b2.matrix.rotate(-g_neckAngle/3,0,1,0);
   b2.matrix.scale(.8,.9,1);
   var b2Coord = new Matrix4(b2.matrix);
   b2.render();
@@ -400,33 +437,74 @@ function renderScene(){
   b3.color = [.5,.4,.3,1.0];
   b3.matrix = b2Coord;
   b3.matrix.translate(0.1,0,1);
-  b3.matrix.rotate(g_neckAngle/1,0,1,0);
+  b3.matrix.rotate(g_neckAngle/2,0,1,0);
   b3.matrix.scale(.8,.9,.9);
   var b3Coord = new Matrix4(b3.matrix);
   b3.render();
 
-
-  var l3 = new Matrix4(b3.matrix);
+  // Shoulder 3
+  var shoulder3 = new Matrix4(b3.matrix);
   
   var fleg3 = new Cube();
   fleg3.color = [.6,.55,.4,1.0];
-  fleg3.matrix = l3;
+  fleg3.matrix = shoulder3;
   fleg3.matrix.translate(1,.1,0.3);
-  fleg3.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg3.matrix.rotate(0,0,1,0);
   fleg3.matrix.scale(0.3,0.3,.3);
   var fleg3Coord = new Matrix4(fleg3.matrix);
   fleg3.render();
 
-  var l4 = new Matrix4(b3.matrix);
+  var fleg3a = new Cube();
+  fleg3a.color = [.6,.55,.4,1.0];
+  fleg3a.matrix = fleg3Coord;
+  fleg3a.matrix.translate(.5,.01,0.25);
+  fleg3a.matrix.rotate(-90,0,0,1);
+  fleg3a.matrix.rotate(g_neckAngle/3,0,1,0);
+  fleg3a.matrix.scale(1.5,.4,.5);
+  var fleg3aCoord = new Matrix4(fleg3a.matrix);
+  fleg3a.render();
+
+  var foot3 = new Cube();
+  foot3.color = [.6,.55,.4,1.0];
+  foot3.matrix = fleg3aCoord;
+  foot3.matrix.translate(.8,-.2,.9);
+  foot3.matrix.rotate(90,0,1,0);
+  foot3.matrix.rotate(g_neckAngle/7,0,1,0);
+  foot3.matrix.scale(2.5,2,.3);
+  foot3.render();
+
+
+
+  // shoulder 4
+  var shoulder4 = new Matrix4(b3.matrix);
   
   var fleg4 = new Cube();
   fleg4.color = [.6,.55,.4,1.0];
-  fleg4.matrix = l4;
+  fleg4.matrix = shoulder4;
   fleg4.matrix.translate(-.3,.1,0.3);
-  fleg4.matrix.rotate(g_neckAngle/1.5,0,1,0);
+  fleg4.matrix.rotate(0,0,1,0);
   fleg4.matrix.scale(0.3,0.3,.3);
   var fleg4Coord = new Matrix4(fleg4.matrix);
   fleg4.render();
+
+  var fleg4a = new Cube();
+  fleg4a.color = [.6,.55,.4,1.0];
+  fleg4a.matrix = fleg4Coord;
+  fleg4a.matrix.translate(0.08,.01,0.25);
+  fleg4a.matrix.rotate(-90,0,0,1);
+  fleg4a.matrix.rotate(-g_neckAngle/3,0,1,0);
+  fleg4a.matrix.scale(1.5,.4,.5);
+  var fleg4aCoord = new Matrix4(fleg4a.matrix);
+  fleg4a.render();
+
+  var foot4 = new Cube();
+  foot4.color = [.6,.55,.4,1.0];
+  foot4.matrix = fleg4aCoord;
+  foot4.matrix.translate(.8,-.8,.9);
+  foot4.matrix.rotate(90,0,1,0);
+  foot4.matrix.rotate(g_neckAngle/7,0,1,0);
+  foot4.matrix.scale(2.5,2,.3);
+  foot4.render();
 
   var spikeCoord1 = new Matrix4(b3.matrix);
   // spikes
