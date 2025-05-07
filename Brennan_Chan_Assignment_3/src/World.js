@@ -10,11 +10,10 @@ precision mediump float;
   uniform mat4 u_ProjectionMatrix;
   uniform mat4 u_GlobalRotateMatrix;
   void main() {
-    gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
   }`
 
-  // u_ProjectionMatrix * u_ViewMatrix *  
 // Fragment shader program
 var FSHADER_SOURCE = `
   precision mediump float;
@@ -108,7 +107,7 @@ function connectVariablesToGLSL(){
     return;
   }
 
-  /*// Get the storage location of u_ViewMatrix
+  // Get the storage location of u_ViewMatrix
   u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if(!u_ViewMatrix){
     console.log('Failed to get the storage location of u_ViewMatrix');
@@ -121,7 +120,7 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of u_ProjectionMatrix');
     return;
   }
-*/
+
   // Get the storage location of u_Sampler
   u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
   if (!u_Sampler0) {
@@ -285,6 +284,14 @@ function renderScene(){
   // check the time at the start of this function
   var startTime = performance.now();
 
+  // Pass the projection matrix
+  var projMat = new Matrix4();
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
+
+  // Pass the view matrix
+  var viewMat = new Matrix4();
+  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
+  
   // Pass the matrix to u_ModelMatrix attribute
   var globalRotMat = new Matrix4().rotate(g_globalAngle,0,1,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
