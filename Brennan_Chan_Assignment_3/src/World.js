@@ -21,10 +21,22 @@ var FSHADER_SOURCE = `
   varying vec2 v_UV;
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
+  uniform int u_whichTexture;
   void main() {
-    gl_FragColor = u_FragColor;
-    gl_FragColor = vec4(v_UV,1,1);
-    gl_FragColor = texture2D(u_Sampler0, v_UV);
+
+    if (u_whichTexture == -2) {
+      gl_FragColor = u_FragColor;                         // Use color
+
+    } else if (u_whichTexture == -1){                     // Use UV debug color
+      gl_FragColor = vec4(v_UV,1,1);
+
+    } else if (u_whichTexture == 0){                      // Use texture0
+      gl_FragColor = texture2D(u_Sampler0, v_UV);
+
+    } else {                                              // Error, put pink
+      gl_FragColor = vec4(1,0.25,0.8,1);  
+    }
+
   }`
 
 // Global vars
@@ -37,6 +49,7 @@ let u_ProjectionMatrix;
 let u_ViewMatrix;
 let u_GlobalRotateMatrix;
 let u_Sampler0;
+let u_whichTexture;
 
 function setupWebGL(){
   // Retrieve <canvas> element
@@ -95,7 +108,7 @@ function connectVariablesToGLSL(){
     return;
   }
 
-  // Get the storage location of u_ViewMatrix
+  /*// Get the storage location of u_ViewMatrix
   u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if(!u_ViewMatrix){
     console.log('Failed to get the storage location of u_ViewMatrix');
@@ -108,11 +121,18 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of u_ProjectionMatrix');
     return;
   }
-
+*/
   // Get the storage location of u_Sampler
   u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
   if (!u_Sampler0) {
     console.log('Failed to get the storage location of u_Sampler0');
+    return;
+  }
+
+  // Get the storage location of u_Sampler
+  u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
+  if (!u_whichTexture) {
+    console.log('Failed to get the storage location of u_whichTexture');
     return;
   }
 
@@ -156,34 +176,28 @@ function addAllActionsForHtmlUI(){
   document.getElementById('angleSlide').addEventListener('mousemove', function() { g_globalAngle = this.value; renderScene(); });
 }
 
-function initTextures(gl, n) {
-  var texture = gl.createTexture();   // Create a texture object
-  if (!texture) {
-    console.log('Failed to create the texture object');
-    return false;
-  }
-
-  /*// Get the storage location of u_Sampler
-  var u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
-  if (!u_Sampler0) {
-    console.log('Failed to get the storage location of u_Sampler0');
-    return false;
-  }
-    */
+function initTextures() {
   var image = new Image();  // Create the image object
   if (!image) {
     console.log('Failed to create the image object');
     return false;
   }
   // Register the event handler to be called on loading an image
-  image.onload = function(){ loadTexture(gl, n, texture, u_Sampler0, image); };
+  image.onload = function(){ sendImageToTEXTURE0(image); };
   // Tell the browser to load an image
   image.src = 'sky.jpg';
 
+  // Add more texture loading
   return true;
 }
 
-function loadTexture(gl, n, texture, u_Sampler, image) {
+function sendImageToTEXTURE0(image) {
+  var texture = gl.createTexture();   // Create a texture object
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
   // Enable texture unit0
   gl.activeTexture(gl.TEXTURE0);
@@ -196,11 +210,11 @@ function loadTexture(gl, n, texture, u_Sampler, image) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
   
   // Set the texture unit 0 to the sampler
-  gl.uniform1i(u_Sampler, 0);
+  gl.uniform1i(u_Sampler0, 0);
   
-  gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
+  //gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
 
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
+  //gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
 }
 
 function main() {
@@ -214,7 +228,7 @@ function main() {
   //canvas.onmousedown = click;
   //canvas.onmousemove = click;
   //canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
-  initTextures(gl,0);
+  initTextures();
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   // Clear <canvas>
@@ -285,6 +299,7 @@ function renderScene(){
   // Draw the body cube
   var body = new Cube();
   body.color = [1.0,0.0,0.0,1.0];
+  body.textureNum=0;
   body.matrix.translate(-0.25,-.75,-.5);
   body.matrix.rotate(0,1,0,0);
   body.matrix.scale(0.5,0.3,0.5);
@@ -310,6 +325,7 @@ function renderScene(){
 
   var magenta = new Cube();
   magenta.color = [1,0,1,1];
+  magenta.textureNum=0;
   magenta.matrix = yellowCoordinatesMat; //translate(-.1,.1,0,0);
   magenta.matrix.translate(0,0.65,0);
   magenta.matrix.rotate(g_magentaAngle,0,0,1);
