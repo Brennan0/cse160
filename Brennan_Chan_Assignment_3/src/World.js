@@ -279,6 +279,11 @@ function updateAnimationAngles(){
   }
 }
 
+// can replace with vector class from asgn0
+var g_eye = [0,0,3];
+var g_at = [0,0, -100];
+var g_up = [0,1,0];
+
 function renderScene(){
 
   // check the time at the start of this function
@@ -286,10 +291,12 @@ function renderScene(){
 
   // Pass the projection matrix
   var projMat = new Matrix4();
+  projMat.setPerspective(50, canvas.width/canvas.height, 1, 100); // degrees, aspect ratio, near plane, far plane
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
   // Pass the view matrix
   var viewMat = new Matrix4();
+  viewMat.setLookAt(g_eye[0], g_eye[1], g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0], g_up[1], g_up[2]); // (eye, at, up)
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
   
   // Pass the matrix to u_ModelMatrix attribute
