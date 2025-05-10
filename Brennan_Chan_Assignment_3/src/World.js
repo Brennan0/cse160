@@ -227,6 +227,9 @@ function main() {
   //canvas.onmousedown = click;
   //canvas.onmousemove = click;
   //canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
+
+  document.onkeydown = keydown;
+
   initTextures();
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -276,6 +279,18 @@ function updateAnimationAngles(){
   }
   if (g_magentaAnimation){
     g_magentaAngle = (45*Math.sin(5 * g_seconds));
+  }
+}
+
+function keydown(ev){
+  if (ev.keyCode == 87){ // W
+    g_eye[2] -= 0.2;
+  } else if (ev.keyCode == 65){ // A
+    g_eye[0] -= 0.2;
+  } else if (ev.keyCode == 83){ // S
+    g_eye[2] += 0.2;
+  } else if (ev.keyCode == 68){ // D
+    g_eye[0] += 0.2;
   }
 }
 
