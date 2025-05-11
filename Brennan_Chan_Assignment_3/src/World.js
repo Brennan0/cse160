@@ -333,18 +333,22 @@ var g_up = [0,1,0];
 
 function keydown(ev){
   if (ev.keyCode == 87){ // W
-    g_eye[2] -= 0.2;
+    g_camera.moveForward();
+    //g_eye[2] -= 0.2;
   } else if (ev.keyCode == 65){ // A
-    g_eye[0] -= 0.2;
+    g_camera.moveLeft();
+    //g_eye[0] -= 0.2;
   } else if (ev.keyCode == 83){ // S
-    g_eye[2] += 0.2;
+    g_camera.moveBack();
+    //g_eye[2] += 0.2;
   } else if (ev.keyCode == 68){ // D
-    g_eye[0] += 0.2;
-  } /*else if (ev.keyCode == 81){ // Q
-    pass;
+    g_camera.moveRight();
+    //g_eye[0] += 0.2;
+  } else if (ev.keyCode == 81){ // Q
+    g_camera.panLeft();
   } else if (ev.keyCode == 69){ // E
-    pass;
-  }*/
+    g_camera.panRight();
+  }
 
   renderScene();
 }
