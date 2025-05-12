@@ -600,8 +600,8 @@ function renderScene(){
   yellow.color = [1,1,0,1];
   yellow.textureNum = 0;
   yellow.matrix.setTranslate(0,-.7,-.4);
-  yellow.matrix.rotate(-30,1,0,0);
-  yellow.matrix.rotate(-g_yellowAngle,0,0,1);
+  yellow.matrix.rotate(0,1,0,0);
+  //yellow.matrix.rotate(-g_yellowAngle,0,0,1);
   /*
   if (g_yellowAnimation){
     yellow.matrix.rotate(45*Math.sin(g_seconds), 0,0,1);
@@ -618,11 +618,30 @@ function renderScene(){
   magenta.color = [1,0,1,1];
   magenta.textureNum=0;
   magenta.matrix = yellowCoordinatesMat; //translate(-.1,.1,0,0);
-  magenta.matrix.translate(0,0.65,0);
-  magenta.matrix.rotate(g_magentaAngle,0,0,1);
-  magenta.matrix.scale(.3,.3,.3);
+  magenta.matrix.translate(0,0.5,0);
+  magenta.matrix.rotate(0,1,0,0);
+  //magenta.matrix.rotate(g_magentaAngle,0,0,1);
+  magenta.matrix.scale(.4,.4,.4);
   magenta.matrix.translate(-.5,0,-0.001);
-  magenta.render();
+  magenta.renderFaster();
+
+  var eye1Coord = nssew Matrix4(magenta.matrix);
+  var eye1 = new Cube();
+  eye1.textureNum = -2;
+  eye1.color = [0,0,0,1.0];
+  eye1.matrix = eye1Coord;
+
+  eye1.matrix.rotate(270,1,0,0)
+  eye1.matrix.translate(0,-1.13,.5);
+  eye1.matrix.scale(.2,.1,.2);
+  eye1.renderFaster();
+
+  eye1.matrix.translate(4,0,0);
+  eye1.renderFaster();
+
+  eye1.matrix.translate(-3,0,-2);
+  eye1.matrix.scale(3,1,.5);
+  eye1.renderFaster();
 
   drawAnimal();
 
