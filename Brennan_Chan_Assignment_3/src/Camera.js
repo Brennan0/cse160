@@ -60,8 +60,8 @@ class Camera{
         this.at = this.at.add(s);
     }
 
-    panLeft() {
-    const alpha = 5;
+    panLeft(alpha) {
+    
 
     // f = at - eye
     let f = new Vector3([
@@ -85,8 +85,7 @@ class Camera{
 }
 
 
-    panRight() {
-    const alpha = -5;
+    panRight(alpha) {
 
     let f = new Vector3([
         this.at.elements[0] - this.eye.elements[0],

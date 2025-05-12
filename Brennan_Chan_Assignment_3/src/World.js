@@ -166,6 +166,8 @@ let g_selectedRot = 0;
 let g_globalAngle = 0;
 let g_yellowAngle = 0;
 let g_magentaAngle = 0;
+let g_mouseDown = false;
+let g_lastX = 0;
 
 let g_yellowAnimation = false;
 let g_magentaAnimation = false;
@@ -260,6 +262,29 @@ function sendImageToTEXTURE1(image) {
   gl.uniform1i(u_Sampler1, 1);
 }
 
+function onMove(){
+  canvas.onmousedown = function(ev) {
+    g_mouseDown = true;
+    g_lastX = ev.clientX;
+    }
+  
+  canvas.onmouseup = function(ev) {
+    g_mouseDown = false;
+  };
+  
+  canvas.onmousemove = function(ev) {
+    if (g_mouseDown) {
+      const dx = ev.clientX - g_lastX;
+      g_lastX = ev.clientX;
+
+      const alpha = dx * 0.3;
+      g_camera.panLeft(alpha);
+
+      renderScene();
+    }
+  };
+}
+
 function main() {
 
   setupWebGL();
@@ -273,7 +298,7 @@ function main() {
   //canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
 
   document.onkeydown = keydown;
-
+  onMove();
   initTextures();
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -345,9 +370,9 @@ function keydown(ev){
     g_camera.moveRight();
     //g_eye[0] += 0.2;
   } else if (ev.keyCode == 81){ // Q
-    g_camera.panLeft();
+    g_camera.panLeft(5);
   } else if (ev.keyCode == 69){ // E
-    g_camera.panRight();
+    g_camera.panRight(5);
   }
 
   renderScene();
