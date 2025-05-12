@@ -196,7 +196,7 @@ function initTextures() {
   // Register the event handler to be called on loading an image
   image0.onload = function(){ sendImageToTEXTURE0(image0); };
   // Tell the browser to load an image
-  image0.src = 'sky.jpg';
+  image0.src = 'creeper.jpg';
 
   var image1 = new Image();  // Create the image object
   if (!image1) {
@@ -206,7 +206,7 @@ function initTextures() {
   // Register the event handler to be called on loading an image
   image1.onload = function(){ sendImageToTEXTURE1(image1); };
   // Tell the browser to load an image
-  image1.src = 'grass.jpg';
+  image1.src = 'grassBlocksq.jpg';
   
   // Add more texture loading
   return true;
@@ -355,7 +355,105 @@ function keydown(ev){
 
 
 var g_camera = new Camera();
-
+var g_map = [
+[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0
+],
+[0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+ 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0
+],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0
+],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0
+],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+],
+];
+/*
 var g_map = [
 [1, 1, 1, 1, 1, 1, 1, 1, 1],
 [0, 1, 0, 0, 0, 1, 0, 0, 0],
@@ -366,17 +464,37 @@ var g_map = [
 [1, 0, 0, 0, 0, 0, 1, 0, 1],
 [1, 0, 0, 0, 0, 0, 1, 0, 1],
 [1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
+
+];*/
 
 function drawMap(){
-  for(x=0; x<9; x++){
-    for(y=0;y<9;y++){
+  var wall = new Cube();
+  var wall2 = new Cube();
+  for(x=0; x<32; x++){
+    for(y=0;y<32;y++){
+      //if (x < 1 || x==31 || y == 0 || y == 31){
       if (g_map[x][y] == 1){
-        var wall = new Cube();
+        //var wall = new Cube();
         wall.color = [1,1,1,1];
-        wall.matrix.translate(x-4, -0.75, y-4);
-        wall.matrix.scale(1,0.5,1);
-        wall.render();
+        wall.textureNum = 1;
+        wall.matrix.setTranslate(0,-.75,0);
+        wall.matrix.scale(1,1,1);
+        wall.matrix.translate(x-16, 0, y-16);
+        wall.renderFaster();
+        //wall.renderFast();
+      } else if (g_map[x][y] == 2){
+        wall.color = [1,1,1,1];
+        wall.textureNum = 1;
+        wall.matrix.setTranslate(0,-.75,0);
+        wall.matrix.scale(1,1,1);
+        wall.matrix.translate(x-16, 0, y-16);
+        wall.renderFaster();
+        wall2.color = [1,1,1,1];
+        wall2.textureNum = 1;
+        wall2.matrix.setTranslate(0,-.75,0);
+        wall2.matrix.scale(1,1,1);
+        wall2.matrix.translate(x-16, 1, y-16);
+        wall2.renderFaster();
       }
     }
 
@@ -440,7 +558,7 @@ function renderScene(){
   floor.color = [1,0,0,1];
   floor.textureNum = 1;
   floor.matrix.translate(0,-0.75, 0);
-  floor.matrix.scale(10,0,10);
+  floor.matrix.scale(32,0,32);
   floor.matrix.translate(-.5,0,-.5);
   floor.render();
 
@@ -448,8 +566,8 @@ function renderScene(){
 
   // Draw sky
   var sky = new Cube();
-  sky.color = [1,0,0,1];
-  sky.textureNum=0;
+  sky.color = [.8,.9,1,1];
+  sky.textureNum=-2;
   sky.matrix.scale(50,50,50);
   sky.matrix.translate(-.5,-.5,-.5);
   sky.render();
@@ -461,11 +579,12 @@ function renderScene(){
   body.matrix.translate(-0.25,-.75,-.5);
   body.matrix.rotate(0,1,0,0);
   body.matrix.scale(0.5,0.3,0.5);
-  body.render();
+  body.renderFaster();
 
   // Draw left arm
   var yellow = new Cube();
   yellow.color = [1,1,0,1];
+  yellow.textureNum = 0;
   yellow.matrix.setTranslate(0,-.7,-.4);
   yellow.matrix.rotate(-30,1,0,0);
   yellow.matrix.rotate(-g_yellowAngle,0,0,1);
@@ -491,6 +610,8 @@ function renderScene(){
   magenta.matrix.translate(-.5,0,-0.001);
   magenta.render();
 
+  drawAnimal();
+
   var duration = performance.now() - startTime;
 
   sendTextToHTML("ms: " + Math.floor(duration) + "fps: " + Math.floor(10000/duration)/10 + " orientation: " + g_selectedRot * 90, "numdot");
@@ -503,4 +624,496 @@ function sendTextToHTML(text, htmlID){
     return;
   }
   htmlElm.innerHTML = text;
+}
+let g_wholeAngle = 0;
+
+let g_headAngle = 0;
+
+let g_shoulderAngle = 0;
+
+let g_legAngle = 0;
+
+
+let g_footAngle = 0;
+
+
+function drawAnimal(){
+  // Draw Body section 1 --------------------------------------------------------------------------
+  var b1 = new Cube();
+  b1.color = [.5,.4,.3,1.0];
+  b1.matrix.textureNum = 1;
+  b1.matrix.translate(-0.25,-.6 - 0.005 * g_yellowAngle,-4);
+  //b1.matrix.translate(-0.25,-.6,-4);
+  b1.matrix.rotate(g_wholeAngle/4,0,1,0);
+  b1.matrix.rotate(180,0,1,0);
+  b1.matrix.scale(0.5,0.3,.3);
+  var b1Coord = new Matrix4(b1.matrix);
+  //b1.render();
+  b1.drawCube(b1.matrix,[.5,.4,.3,1.0]);
+
+
+  var shoulder1 = new Matrix4(b1.matrix);
+  
+  var fleg1 = new Cube();
+  fleg1.color = [.6,.55,.4,1.0];
+  fleg1.matrix = shoulder1;
+  fleg1.matrix.translate(1,.1,0.3);
+  /*if(g_pokeAnimation){
+    fleg1.matrix.rotate(g_shoulderAngle,1,0,0);
+  }else{*/
+  fleg1.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  //}
+  fleg1.matrix.scale(0.3,0.3,.3);
+  var fleg1Coord = new Matrix4(fleg1.matrix);
+  //fleg1.render();
+  fleg1.drawCube(fleg1.matrix,[.6,.55,.4,1.0]);
+
+  var fleg1a = new Cube();
+  fleg1a.color = [.6,.55,.4,1.0];
+  fleg1a.matrix = fleg1Coord;
+  fleg1a.matrix.translate(.5,.01,0.25);
+  fleg1a.matrix.rotate(-90,0,0,1);
+  fleg1a.matrix.rotate(g_legAngle/3,0,1,0);
+  fleg1a.matrix.scale(1.5,.4,.5);
+  var fleg1aCoord = new Matrix4(fleg1a.matrix);
+  //fleg1a.render();
+  fleg1a.drawCube(fleg1a.matrix,[.6,.55,.4,1.0]);
+
+  var foot1 = new Cube();
+  foot1.color = [.6,.55,.4,1.0];
+  foot1.matrix = fleg1aCoord;
+  foot1.matrix.translate(.8,-.2,.9);
+  foot1.matrix.rotate(90,0,1,0);
+  foot1.matrix.rotate(g_footAngle/7,0,1,0);
+  foot1.matrix.scale(2.5,2,.3);
+  //foot1.render();
+  foot1.drawCube(foot1.matrix,[.6,.55,.4,1.0]);
+
+  var shoulder2 = new Matrix4(b1.matrix);
+  
+  var fleg2 = new Cube();
+  fleg2.color = [.6,.55,.4,1.0];
+  fleg2.matrix = shoulder2;
+  fleg2.matrix.translate(-.3,.1,0.3);
+
+  /*if(g_pokeAnimation){
+    fleg2.matrix.rotate(-g_shoulderAngle,1,0,0);
+  }else{*/
+  fleg2.matrix.rotate(-g_shoulderAngle/4,0,0,1);
+  //}
+  fleg2.matrix.scale(0.3,0.3,.3);
+  var fleg2Coord = new Matrix4(fleg2.matrix);
+  //fleg2.render();
+  fleg2.drawCube(fleg2.matrix,[.6,.55,.4,1.0]);
+
+  var fleg2a = new Cube();
+  fleg2a.color = [.6,.55,.4,1.0];
+  fleg2a.matrix = fleg2Coord;
+  fleg2a.matrix.translate(0.08,.01,0.25);
+  fleg2a.matrix.rotate(-90,0,0,1);
+  fleg2a.matrix.rotate(-g_legAngle/3,0,1,0);
+  fleg2a.matrix.scale(1.5,.4,.5);
+  var fleg2aCoord = new Matrix4(fleg2a.matrix);
+  //fleg2a.render();
+  fleg2a.drawCube(fleg2a.matrix,[.6,.55,.4,1.0]);
+
+  var foot2 = new Cube();
+  foot2.color = [.6,.55,.4,1.0];
+  foot2.matrix = fleg2aCoord;
+  foot2.matrix.translate(.8,-.8,.9);
+  foot2.matrix.rotate(90,0,1,0);
+  foot2.matrix.rotate(g_footAngle/7,0,1,0);
+  foot2.matrix.scale(2.5,2,.3);
+  //foot2.render();
+  foot2.drawCube(foot2.matrix,[.6,.55,.4,1.0]);
+
+  var spikeCoord1 = new Matrix4(b1.matrix);
+  // spikes
+  var s1 = new Pyr();
+  s1.color = [.85,.75,.5,1.0];
+  s1.matrix = spikeCoord1;
+  s1.matrix.translate(0,1,0);
+  s1.matrix.rotate(0,1,0,0);
+  s1.matrix.scale(0.5,1,1);
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord2 = new Matrix4(b1.matrix);
+  var s2 = new Pyr();
+  s2.color = [.85,.75,.5,1.0];
+  s2.matrix = spikeCoord2;
+  s2.matrix.translate(0.5,1,0);
+  s2.matrix.rotate(0,1,0,0);
+  s2.matrix.scale(0.5,1,1);
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord3 = new Matrix4(b1.matrix);
+  var s3 = new Pyr();
+  s3.color = [.85,.75,.5,1.0];
+  s3.matrix = spikeCoord3;
+  s3.matrix.translate(1,1,0);
+  s3.matrix.rotate(-90,0,0,1);
+  s3.matrix.scale(0.5,.4,1);
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord4 = new Matrix4(b1.matrix);
+  var s4 = new Pyr();
+  s4.color = [.85,.75,.5,1.0];
+  s4.matrix = spikeCoord4;
+  s4.matrix.translate(0,0.5,0);
+  s4.matrix.rotate(90,0,0,1);
+  s4.matrix.scale(0.5,.4,1);
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
+
+
+  // Draw Body section 2 --------------------------------------------------------------------------
+  var b2 = new Cube();
+  b2.color = [.5,.4,.3,1.0];
+  b2.matrix = b1Coord;
+  b2.matrix.translate(0.1,0,1);
+  b2.matrix.rotate(-g_wholeAngle/3,0,1,0);
+  b2.matrix.scale(.8,.9,1);
+  var b2Coord = new Matrix4(b2.matrix);
+  //b2.render();
+  b2.drawCube(b2.matrix,[.5,.4,.3,1.0]);
+
+  var spikeCoord1 = new Matrix4(b2.matrix);
+  // spikes
+  var s1 = new Pyr();
+  s1.color = [.85,.75,.5,1.0];
+  s1.matrix = spikeCoord1;
+  s1.matrix.translate(0,1,0);
+  s1.matrix.rotate(0,1,0,0);
+  s1.matrix.scale(0.5,1,1);
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord2 = new Matrix4(b2.matrix);
+  var s2 = new Pyr();
+  s2.color = [.85,.75,.5,1.0];
+  s2.matrix = spikeCoord2;
+  s2.matrix.translate(0.5,1,0);
+  s2.matrix.rotate(0,1,0,0);
+  s2.matrix.scale(0.5,1,1);
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord3 = new Matrix4(b2.matrix);
+  var s3 = new Pyr();
+  s3.color = [.85,.75,.5,1.0];
+  s3.matrix = spikeCoord3;
+  s3.matrix.translate(1,1,0);
+  s3.matrix.rotate(-90,0,0,1);
+  s3.matrix.scale(0.5,.4,1);
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord4 = new Matrix4(b2.matrix);
+  var s4 = new Pyr();
+  s4.color = [.85,.75,.5,1.0];
+  s4.matrix = spikeCoord4;
+  s4.matrix.translate(0,0.5,0);
+  s4.matrix.rotate(90,0,0,1);
+  s4.matrix.scale(0.5,.4,1);
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord5 = new Matrix4(b2.matrix);
+  var s5 = new Pyr();
+  s5.color = [.85,.75,.5,1.0];
+  s5.matrix = spikeCoord5;
+  s5.matrix.translate(0,0,0);
+  s5.matrix.rotate(90,0,0,1);
+  s5.matrix.scale(0.5,.4,1);
+  //s5.render();
+  s5.drawPyr(s5.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord6 = new Matrix4(b2.matrix);
+  var s6 = new Pyr();
+  s6.color = [.85,.75,.5,1.0];
+  s6.matrix = spikeCoord6;
+  s6.matrix.translate(1,.5,0);
+  s6.matrix.rotate(-90,0,0,1);
+  s6.matrix.scale(0.5,.4,1);
+  //s6.render();
+  s6.drawPyr(s6.matrix, [.85,.75,.5,1.0]);
+
+  
+
+  // Draw Body section 3 --------------------------------------------------------------------------
+  var b3 = new Cube();
+  b3.color = [.5,.4,.3,1.0];
+  b3.matrix = b2Coord;
+  b3.matrix.translate(0.1,0,1);
+  b3.matrix.rotate(g_wholeAngle/2,0,1,0);
+  b3.matrix.scale(.8,.9,.9);
+  var b3Coord = new Matrix4(b3.matrix);
+  //b3.render();
+  b3.drawCube(b3.matrix,[.5,.4,.3,1.0]);
+
+
+  // Shoulder 3
+  var shoulder3 = new Matrix4(b3.matrix);
+  
+  var rleg1 = new Cube();
+  rleg1.color = [.6,.55,.4,1.0];
+  rleg1.matrix = shoulder3;
+  rleg1.matrix.translate(1,.1,0.3);
+  //fleg3.matrix.rotate(0,0,1,0);
+  /*if(g_pokeAnimation){
+    rleg1.matrix.rotate(-g_shoulderAngle,1,0,0);
+  }else{*/
+    rleg1.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  //}
+  rleg1.matrix.scale(0.3,0.3,.3);
+  var rleg1Coord = new Matrix4(rleg1.matrix);
+  //rleg1.render();
+  rleg1.drawCube(rleg1.matrix,[.6,.55,.4,1.0]);
+
+  var rleg1a = new Cube();
+  rleg1a.color = [.6,.55,.4,1.0];
+  rleg1a.matrix = rleg1Coord;
+  rleg1a.matrix.translate(.5,.01,0.25);
+  rleg1a.matrix.rotate(-90,0,0,1);
+  rleg1a.matrix.rotate(g_legAngle/3,0,1,0);
+  rleg1a.matrix.scale(1.5,.4,.5);
+  var rleg1aCoord = new Matrix4(rleg1a.matrix);
+  //rleg1a.render();
+  rleg1a.drawCube(rleg1a.matrix,[.6,.55,.4,1.0]);
+
+  var foot3 = new Cube();
+  foot3.color = [.6,.55,.4,1.0];
+  foot3.matrix = rleg1aCoord;
+  foot3.matrix.translate(.8,-.2,.9);
+  foot3.matrix.rotate(90,0,1,0);
+  foot3.matrix.rotate(g_footAngle/7,0,1,0);
+  foot3.matrix.scale(2.5,2,.3);
+  //foot3.render();
+  foot3.drawCube(foot3.matrix,[.6,.55,.4,1.0]);
+
+
+
+  // shoulder 4
+  var shoulder4 = new Matrix4(b3.matrix);
+  var rleg2 = new Cube();
+  rleg2.color = [.6,.55,.4,1.0];
+  rleg2.matrix = shoulder4;
+  rleg2.matrix.translate(-.3,.1,0.3);
+  //fleg4.matrix.rotate(0,0,1,0);
+  /*if(g_pokeAnimation){
+    rleg2.matrix.rotate(g_shoulderAngle,1,0,0);
+  }else{*/
+    rleg2.matrix.rotate(g_shoulderAngle/4,0,0,1);
+  //}
+  rleg2.matrix.scale(0.3,0.3,.3);
+  var rleg2Coord = new Matrix4(rleg2.matrix);
+  //rleg2.render();
+  rleg2.drawCube(rleg2.matrix,[.6,.55,.4,1.0]);
+
+  var rleg2a = new Cube();
+  rleg2a.color = [.6,.55,.4,1.0];
+  rleg2a.matrix = rleg2Coord;
+  rleg2a.matrix.translate(0.08,.01,0.25);
+  rleg2a.matrix.rotate(-90,0,0,1);
+  rleg2a.matrix.rotate(-g_legAngle/3,0,1,0);
+  rleg2a.matrix.scale(1.5,.4,.5);
+  var rleg2aCoord = new Matrix4(rleg2a.matrix);
+  //rleg2a.render();
+  rleg2a.drawCube(rleg2a.matrix,[.6,.55,.4,1.0]);
+
+  var foot4 = new Cube();
+  foot4.color = [.6,.55,.4,1.0];
+  foot4.matrix = rleg2aCoord;
+  foot4.matrix.translate(.8,-.8,.9);
+  foot4.matrix.rotate(90,0,1,0);
+  foot4.matrix.rotate(g_footAngle/7,0,1,0);
+  foot4.matrix.scale(2.5,2,.3);
+  //foot4.render();
+  foot4.drawCube(foot4.matrix,[.6,.55,.4,1.0]);
+
+  var spikeCoord1 = new Matrix4(b3.matrix);
+  // spikes
+  var s1 = new Pyr();
+  s1.color = [.85,.75,.5,1.0];
+  s1.matrix = spikeCoord1;
+  s1.matrix.translate(0,1,0);
+  s1.matrix.rotate(0,1,0,0);
+  s1.matrix.scale(0.5,1,1);
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
+  
+
+  var spikeCoord2 = new Matrix4(b3.matrix);
+  var s2 = new Pyr();
+  s2.color = [.85,.75,.5,1.0];
+  s2.matrix = spikeCoord2;
+  s2.matrix.translate(0.5,1,0);
+  s2.matrix.rotate(0,1,0,0);
+  s2.matrix.scale(0.5,1,1);
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord3 = new Matrix4(b3.matrix);
+  var s3 = new Pyr();
+  s3.color = [.85,.75,.5,1.0];
+  s3.matrix = spikeCoord3;
+  s3.matrix.translate(1,1,0);
+  s3.matrix.rotate(-90,0,0,1);
+  s3.matrix.scale(0.5,.4,1);
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord4 = new Matrix4(b3.matrix);
+  var s4 = new Pyr();
+  s4.color = [.85,.75,.5,1.0];
+  s4.matrix = spikeCoord4;
+  s4.matrix.translate(0,0.5,0);
+  s4.matrix.rotate(90,0,0,1);
+  s4.matrix.scale(0.5,.4,1);
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
+
+  // Draw Tail
+  var tail = new Pyr();
+  tail.color = [.85,.75,.5,1.0];
+  tail.matrix = b3Coord;
+  tail.matrix.translate(0.1,.9,1);
+  tail.matrix.rotate(90,1,0,0);
+  tail.matrix.scale(.8,4,.9);
+  //tail.render();
+  tail.drawPyr(tail.matrix, [.85,.75,.5,1.0]);
+
+
+  // Neck -----------------------------------------------------------------------------------------
+  var neckOrig = new Matrix4(b1.matrix);
+  // Draw neck
+  var neck = new Cube();
+  neck.color = [.6,.55,.4,1.0];
+  neck.matrix = neckOrig;
+  neck.matrix.translate(.5,.5,0);
+  //neck.matrix.setTranslate(0,-.7,-.4);
+  neck.matrix.rotate(-60,1,0,0);
+  neck.matrix.rotate(-g_wholeAngle/2,0,0,1);
+  var neckCoordinatesMat = new Matrix4(neck.matrix);
+  neck.matrix.scale(.3,.6,.3);
+  neck.matrix.translate(-.5,0,0);
+  //neck.render();
+  neck.drawCube(neck.matrix, [.6,.55,.4,1.0]);
+
+  // Head -----------------------------------------------------------------------------------------
+  var head = new Cube();
+  head.color = [.5,.4,.3,1.0];
+  head.matrix = neckCoordinatesMat; //translate(-.1,.1,0,0);
+  head.matrix.translate(0,.5,-.2);
+  //head.matrix.rotate(g_headAngle/4,1,0,0);
+  /*if(g_pokeAnimation){
+    head.matrix.rotate(g_headAngle,0,0,1);
+  }else{*/
+    head.matrix.rotate(g_headAngle/4,1,0,0);
+  //}
+  head.matrix.scale(.6,.6,.6);
+  head.matrix.translate(-.5,0,-0.001);
+  //head.render();
+  head.drawCube(head.matrix, [.5,.4,.3,1.0]);
+
+  var eye1Coord = new Matrix4(head.matrix);
+  var eye1 = new Cube();
+  eye1.textureNum = -2;
+  eye1.color = [.5,.4,.3,1.0];
+  eye1.matrix = eye1Coord;
+  eye1.matrix.translate(0,1,.5);
+  eye1.matrix.scale(.2,.1,.2);
+  eye1.drawCube(eye1.matrix, [0,0,0,1]);
+
+  eye1.matrix.translate(4,0,0);
+  eye1.drawCube(eye1.matrix, [0,0,0,1]);
+
+  eye1.matrix.translate(-3,0,-2);
+  eye1.matrix.scale(3,1,.5);
+  eye1.drawCube(eye1.matrix, [0,0,0,1]);
+
+  var spikeCoord1 = new Matrix4(head.matrix);
+  // spikes
+  var s1 = new Pyr();
+  s1.color = [.85,.75,.5,1.0];
+  s1.matrix = spikeCoord1;
+  s1.matrix.translate(0,1,1);
+  s1.matrix.rotate(90,1,0,0);
+  s1.matrix.scale(0.5,1,1);
+  //s1.render();
+  s1.drawPyr(s1.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord2 = new Matrix4(head.matrix);
+  var s2 = new Pyr();
+  s2.color = [.85,.75,.5,1.0];
+  s2.matrix = spikeCoord2;
+  s2.matrix.translate(0.5,1,1);
+  s2.matrix.rotate(90,1,0,0);
+  s2.matrix.scale(0.5,1,1);
+  //s2.render();
+  s2.drawPyr(s2.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord3 = new Matrix4(head.matrix);
+  var s3 = new Pyr();
+  s3.color = [.85,.75,.5,1.0];
+  s3.matrix = spikeCoord3;
+  s3.matrix.translate(1,1,0);
+  s3.matrix.rotate(-90,0,0,1);
+  s3.matrix.scale(0.5,.4,1);
+  //s3.render();
+  s3.drawPyr(s3.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord4 = new Matrix4(head.matrix);
+  var s4 = new Pyr();
+  s4.color = [.85,.75,.5,1.0];
+  s4.matrix = spikeCoord4;
+  s4.matrix.translate(0,0.5,0);
+  s4.matrix.rotate(90,0,0,1);
+  s4.matrix.scale(0.5,.4,1);
+  //s4.render();
+  s4.drawPyr(s4.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord5 = new Matrix4(head.matrix);
+  var s5 = new Pyr();
+  s5.color = [.85,.75,.5,1.0];
+  s5.matrix = spikeCoord5;
+  s5.matrix.translate(0,0,0);
+  s5.matrix.rotate(90,0,0,1);
+  s5.matrix.scale(0.5,.8,1);
+  //s5.render();
+  s5.drawPyr(s5.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord6 = new Matrix4(head.matrix);
+  var s6 = new Pyr();
+  s6.color = [.85,.75,.5,1.0];
+  s6.matrix = spikeCoord6;
+  s6.matrix.translate(1,.5,0);
+  s6.matrix.rotate(-90,0,0,1);
+  s6.matrix.scale(0.5,.8,1);
+  //s6.render();
+  s6.drawPyr(s6.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord7 = new Matrix4(head.matrix);
+  // spikes
+  var s7 = new Pyr();
+  s7.color = [.85,.75,.5,1.0];
+  s7.matrix = spikeCoord7;
+  s7.matrix.translate(0,0,0);
+  s7.matrix.rotate(-90,1,0,0);
+  s7.matrix.scale(0.5,.7,1);
+  //s7.render();
+  s7.drawPyr(s7.matrix, [.85,.75,.5,1.0]);
+
+  var spikeCoord8 = new Matrix4(head.matrix);
+  var s8 = new Pyr();
+  s8.color = [.85,.75,.5,1.0];
+  s8.matrix = spikeCoord8;
+  s8.matrix.translate(0.5,0,0);
+  s8.matrix.rotate(-90,1,0,0);
+  s8.matrix.scale(0.5,.7,1);
+  //s8.render();
+  s8.drawPyr(s8.matrix, [.85,.75,.5,1.0]);
 }

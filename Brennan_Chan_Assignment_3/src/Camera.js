@@ -1,7 +1,7 @@
 class Camera{
     constructor(){
         this.fov = 60.0;
-        this.eye=new Vector3([0,0,0]);
+        this.eye=new Vector3([0,0,3]);
         this.at=new Vector3([0,0,-1]);
         this.up=new Vector3([0,1,0]);
         this.viewMat = new Matrix4();
@@ -60,33 +60,50 @@ class Camera{
         this.at = this.at.add(s);
     }
 
-    panLeft(){
-        let f = new Vector3();
-        f = f.set(this.at);
-        f = f.sub(this.eye);
-        let rotationMatrix = new Matrix4();
-        rotationMatrix = rotationMatrix.setRotate(
-            5, 
-            this.up.elements[0],
-            this.up.elements[1],
-            this.up.elements[2]
-        );
-        let f_prime = rotationMatrix.multiplyVector3(f);
-        this.at = this.at.add(f_prime);
-    }
+    panLeft() {
+    const alpha = 5;
 
-    panRight(){
-        let f = new Vector3();
-        f = f.set(this.at);
-        f = f.sub(this.eye);
-        let rotationMatrix = new Matrix4();
-        rotationMatrix = rotationMatrix.setRotate(
-            -5, 
-            this.up.elements[0],
-            this.up.elements[1],
-            this.up.elements[2]
-        );
-        let f_prime = rotationMatrix.multiplyVector3(f);
-        this.at = this.at.add(f_prime);
-    }
+    // f = at - eye
+    let f = new Vector3([
+        this.at.elements[0] - this.eye.elements[0],
+        this.at.elements[1] - this.eye.elements[1],
+        this.at.elements[2] - this.eye.elements[2]
+    ]);
+
+    // Rotate f around up vector
+    let rotationMatrix = new Matrix4();
+    rotationMatrix.setRotate(alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
+
+    let f_prime = rotationMatrix.multiplyVector3(f);
+
+    // at = eye + f_prime
+    this.at = new Vector3([
+        this.eye.elements[0] + f_prime.elements[0],
+        this.eye.elements[1] + f_prime.elements[1],
+        this.eye.elements[2] + f_prime.elements[2]
+    ]);
+}
+
+
+    panRight() {
+    const alpha = -5;
+
+    let f = new Vector3([
+        this.at.elements[0] - this.eye.elements[0],
+        this.at.elements[1] - this.eye.elements[1],
+        this.at.elements[2] - this.eye.elements[2]
+    ]);
+
+    let rotationMatrix = new Matrix4();
+    rotationMatrix.setRotate(alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
+
+    let f_prime = rotationMatrix.multiplyVector3(f);
+
+    this.at = new Vector3([
+        this.eye.elements[0] + f_prime.elements[0],
+        this.eye.elements[1] + f_prime.elements[1],
+        this.eye.elements[2] + f_prime.elements[2]
+    ]);
+}
+
 }
