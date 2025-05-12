@@ -94,7 +94,7 @@ class Camera{
     ]);
 
     let rotationMatrix = new Matrix4();
-    rotationMatrix.setRotate(alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
+    rotationMatrix.setRotate(-alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
     let f_prime = rotationMatrix.multiplyVector3(f);
 
