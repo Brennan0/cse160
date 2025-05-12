@@ -277,8 +277,8 @@ function onMove(){
       const dx = ev.clientX - g_lastX;
       g_lastX = ev.clientX;
 
-      const alpha = dx * 0.3;
-      g_camera.panLeft(alpha);
+      const alpha = dx * 0.4;
+      g_camera.panLeft(-alpha);
 
       renderScene();
     }
