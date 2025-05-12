@@ -625,7 +625,7 @@ function renderScene(){
   magenta.matrix.translate(-.5,0,-0.001);
   magenta.renderFaster();
 
-  var eye1Coord = nssew Matrix4(magenta.matrix);
+  var eye1Coord = new Matrix4(magenta.matrix);
   var eye1 = new Cube();
   eye1.textureNum = -2;
   eye1.color = [0,0,0,1.0];
