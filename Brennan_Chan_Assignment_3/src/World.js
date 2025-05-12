@@ -208,7 +208,7 @@ function initTextures() {
   // Register the event handler to be called on loading an image
   image1.onload = function(){ sendImageToTEXTURE1(image1); };
   // Tell the browser to load an image
-  image1.src = 'grassBlocksq.jpg';
+  image1.src = 'grassBlockSq.jpg';
   
   // Add more texture loading
   return true;
@@ -629,7 +629,7 @@ function renderScene(){
   // Draw left arm
   var yellow = new Cube();
   yellow.color = [1,1,0,1];
-  yellow.textureNum = 1;
+  yellow.textureNum = 0;
   yellow.matrix.setTranslate(0,-.7,-.4);
   yellow.matrix.rotate(-30,1,0,0);
   yellow.matrix.rotate(-g_yellowAngle,0,0,1);
@@ -687,7 +687,7 @@ function drawAnimal(){
   var b1 = new Cube();
   b1.color = [.5,.4,.3,1.0];
   b1.matrix.textureNum = 1;
-  b1.matrix.translate(-0.25 - 0.005 * - g_yellowAngle,-.4 - 0.009 * Math.abs(g_yellowAngle),-4);
+  b1.matrix.translate(2 - 0.005 * - g_yellowAngle,-.4 - 0.009 * Math.abs(g_yellowAngle),-4);
   //b1.matrix.translate(-0.25,-.6,-4);
   b1.matrix.rotate(g_wholeAngle/4,0,1,0);
   b1.matrix.rotate(180,0,1,0);
