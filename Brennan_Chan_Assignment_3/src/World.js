@@ -373,6 +373,10 @@ function keydown(ev){
     g_camera.panLeft(5);
   } else if (ev.keyCode == 69){ // E
     g_camera.panRight(5);
+  } else if (ev.keyCode == 70){
+    g_camera.addBlock();
+  } else if (ev.keyCode == 71){
+    g_camera.deleteBlock();
   }
 
   renderScene();
@@ -491,42 +495,7 @@ var g_map = [
 [1, 1, 1, 1, 1, 1, 1, 1, 1],
 
 ];*/
-/*
-function drawMap(){
-  var wall = new Cube();
-  var wall2 = new Cube();
-  for(x=0; x<32; x++){
-    for(y=0;y<32;y++){
-      //let n = g_map[x][y];
-      //if (x < 1 || x==31 || y == 0 || y == 31){
-      if (g_map[x][y] == 1){
-        //var wall = new Cube();
-        wall.color = [1,1,1,1];
-        wall.textureNum = 1;
-        wall.matrix.setTranslate(0,-.75,0);
-        wall.matrix.scale(1,1,1);
-        wall.matrix.translate(x-16, 0, y-16);
-        wall.renderFaster();
-        //wall.renderFast();
-      } else if (g_map[x][y] == 2){
-        wall.color = [1,1,1,1];
-        wall.textureNum = 1;
-        wall.matrix.setTranslate(0,-.75,0);
-        wall.matrix.scale(1,1,1);
-        wall.matrix.translate(x-16, 0, y-16);
-        wall.renderFaster();
-        wall2.color = [1,1,1,1];
-        wall2.textureNum = 1;
-        wall2.matrix.setTranslate(0,-.75,0);
-        wall2.matrix.scale(1,1,1);
-        wall2.matrix.translate(x-16, 1, y-16);
-        wall2.renderFaster();
-      }
-    }
 
-  }
-}
-  */
 function drawMap(){
   var wall = new Cube();
   //var wall2 = new Cube();
@@ -686,7 +655,7 @@ function drawAnimal(){
   // Draw Body section 1 --------------------------------------------------------------------------
   var b1 = new Cube();
   b1.color = [.5,.4,.3,1.0];
-  b1.matrix.textureNum = 1;
+  b1.matrix.textureNum = -2;
   b1.matrix.translate(2 - 0.005 * - g_yellowAngle,-.4 - 0.009 * Math.abs(g_yellowAngle),-4);
   //b1.matrix.translate(-0.25,-.6,-4);
   b1.matrix.rotate(g_wholeAngle/4,0,1,0);

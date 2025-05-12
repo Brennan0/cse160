@@ -105,4 +105,25 @@ class Camera{
     ]);
 }
 
+
+    getBlock() {
+        let forwardVect = new Vector3(this.at.elements).sub(this.eye).normalize();
+        const x = Math.floor(this.eye.elements[0] + forwardVect.elements[0] + 16);
+        const z = Math.floor(this.eye.elements[2] + forwardVect.elements[2] + 16);
+        const mapx = Math.max(0, Math.min(31, x));
+        const mapz = Math.max(0, Math.min(31, z));
+
+        return [mapx, mapz];
+    }
+
+
+    addBlock() {
+        const [x, z] = this.getBlock();
+        g_map[x][z] += 1;
+    }
+
+    deleteBlock() {
+        const [x, z] = this.getBlock();
+        if (g_map[x][z] > 0) g_map[x][z] -= 1;
+    }
 }
