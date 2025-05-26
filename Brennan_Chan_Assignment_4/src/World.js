@@ -29,7 +29,7 @@ var FSHADER_SOURCE = `
   void main() {
 
     if (u_whichTexture == -3) {                // Use normal map
-      gl_FragColor = vec4(v_Normal,1.0);                  // Use normal color
+      gl_FragColor = vec4(v_Normal+1.0/2.0,1.0);                  // Use normal color
 
     } else if (u_whichTexture == -2) {
       gl_FragColor = u_FragColor;                         // Use color
@@ -595,20 +595,28 @@ function renderScene(){
   floor.matrix.translate(-.5,0,-.5);
   floor.render();
 
-  drawMap();
+  //drawMap();
 
   // Draw sky
   var sky = new Cube();
   sky.color = [.8,.9,1,1];
-  sky.textureNum=-2;
-  sky.matrix.scale(50,50,50);
+  if (g_normalOn){
+    sky.textureNum = -3;
+  }else{
+    sky.textureNum = -2;
+  }
+  sky.matrix.scale(-8,-8,-8);
   sky.matrix.translate(-.5,-.5,-.5);
-  sky.render();
+  sky.renderFaster();
 
   // Draw the body cube
   var body = new Cube();
   body.color = [1.0,0.0,0.0,1.0];
-  body.textureNum=0;
+  if (g_normalOn){
+    body.textureNum = -3;
+  }else{
+    body.textureNum = -2;
+  }
   body.matrix.translate(-0.25,-.75,-.5);
   body.matrix.rotate(0,1,0,0);
   body.matrix.scale(0.5,0.3,0.5);
@@ -617,7 +625,11 @@ function renderScene(){
   // Draw left arm
   var yellow = new Cube();
   yellow.color = [1,1,0,1];
-  yellow.textureNum = 0;
+  if (g_normalOn){
+    yellow.textureNum = -3;
+  }else{
+    yellow.textureNum = -2;
+  }
   yellow.matrix.setTranslate(0,-.7,-.4);
   yellow.matrix.rotate(0,1,0,0);
   //yellow.matrix.rotate(-g_yellowAngle,0,0,1);
@@ -631,11 +643,15 @@ function renderScene(){
   var yellowCoordinatesMat = new Matrix4(yellow.matrix);
   yellow.matrix.scale(0.25,.5,.25);
   yellow.matrix.translate(-.5,0,0);
-  yellow.render();
+  yellow.renderFaster();
 
   var magenta = new Cube();
   magenta.color = [1,0,1,1];
-  magenta.textureNum=0;
+  if (g_normalOn){
+    magenta.textureNum = -3;
+  }else{
+    magenta.textureNum = -2;
+  }
   magenta.matrix = yellowCoordinatesMat; //translate(-.1,.1,0,0);
   magenta.matrix.translate(0,0.5,0);
   magenta.matrix.rotate(0,1,0,0);
