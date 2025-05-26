@@ -358,7 +358,7 @@ class Cube{
       drawTriangle3D([0,0,0, 0,0,1, 1,0,1]);
       drawTriangle3D([0,0,0, 1,0,1, 1,0,0]);
 
-      gl.uniform4f(u_FragColor, rgba[0]*.75, rgba[1]*.75, rgba[2]*.75, rgba[3]);
+      //gl.uniform4f(u_FragColor, rgba[0]*.75, rgba[1]*.75, rgba[2]*.75, rgba[3]);
 
       // left side
       drawTriangle3D([0,0,0, 0,0,1, 0,1,1]);

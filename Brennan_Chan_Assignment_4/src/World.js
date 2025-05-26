@@ -29,7 +29,9 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler1;
   uniform int u_whichTexture;
   uniform vec3 u_lightPos;
+  uniform vec3 u_cameraPos;
   varying vec4 v_VertPos;
+  uniform bool u_lightOn;
   void main() {
 
     if (u_whichTexture == -3) {                // Use normal map
@@ -51,13 +53,41 @@ var FSHADER_SOURCE = `
       gl_FragColor = vec4(1,0.25,0.8,1);  
     }
 
-    vec3 lightVector = vec3(v_VertPos)-u_lightPos;
+    vec3 lightVector = u_lightPos - vec3(v_VertPos);
     float r = length(lightVector);
-    if(r < 1.0){
-      gl_FragColor = vec4(1,0,0,1);
-    } else if (r < 2.0){
-      gl_FragColor = vec4(0,1,0,1);}
-  }`
+
+    // red green distance visualization
+    //if(r < 1.0){
+    //  gl_FragColor = vec4(1,0,0,1);
+    //} else if (r < 2.0){
+    //  gl_FragColor = vec4(0,1,0,1);}
+    //}
+
+    // N dot L 
+    vec3 L = normalize(lightVector);
+    vec3 N = normalize(v_Normal);
+    float nDotL = max(dot(N,L), 0.0);
+
+    // Reflection
+    vec3 R = reflect(-L, N);
+
+    // eye
+    vec3 E = normalize(u_cameraPos-vec3(v_VertPos));
+
+    // Specular
+    float specular = pow(max(dot(E,R), 0.0),50.0) * 0.6;
+
+    vec3 diffuse = vec3(1.0,1.0,0.9) * vec3(gl_FragColor) * nDotL * 0.7;
+    vec3 ambient = vec3(gl_FragColor) * 0.3;
+
+    if (u_lightOn){
+      if(u_whichTexture == 0){
+        gl_FragColor = vec4(specular + diffuse + ambient, 1.0);
+      }else {
+        gl_FragColor = vec4(diffuse + ambient, 1.0);
+      }
+    }
+}`
 
 // Global vars
 let canvas;
@@ -73,6 +103,8 @@ let u_Sampler0;
 let u_Sampler1;
 let u_whichTexture;
 let u_lightPos;
+let u_cameraPos
+let u_lightOn;
 
 
 function setupWebGL(){
@@ -180,6 +212,20 @@ function connectVariablesToGLSL(){
     return;
   }
 
+  // Get the storage location of u_lightPos
+  u_cameraPos = gl.getUniformLocation(gl.program, 'u_cameraPos');
+  if (!u_cameraPos) {
+    console.log('Failed to get the storage location of u_cameraPos');
+    return;
+  }
+
+  // Get the storage location of u_lightPos
+  u_lightOn = gl.getUniformLocation(gl.program, 'u_lightOn');
+  if (!u_lightOn) {
+    console.log('Failed to get the storage location of u_lightOn');
+    return;
+  }
+
 
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
@@ -206,10 +252,12 @@ let g_yellowAnimation = false;
 let g_magentaAnimation = false;
 let g_normalOn = false;
 let g_lightPos=[0,1,-2];
+let g_lightOn = true; 
 
 // Set up actions for ther HTML UI elements
 function addAllActionsForHtmlUI(){
-
+  document.getElementById('lightON').onclick = function() {g_lightOn = true;};
+  document.getElementById('lightOFF').onclick = function() {g_lightOn = false;};
   document.getElementById('normalON').onclick = function() {g_normalOn = true;};
   document.getElementById('normalOFF').onclick = function() {g_normalOn = false;};
   document.getElementById('yellowOnButton').onclick = function() {g_yellowAnimation = true;}
@@ -390,6 +438,8 @@ function updateAnimationAngles(){
   if (g_magentaAnimation){
     g_magentaAngle = (45*Math.sin(5 * g_seconds));
   }
+
+  //g_lightPos[0] = Math.cos(g_seconds);
 }
 
 // can replace with vector class from asgn0
@@ -608,12 +658,21 @@ function renderScene(){
   // Draw a test triangle
   //drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 0.0,0.0,0.0]);
 
+  // pass the light position to glsl
   gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+
+  // pass the camera position to glsl
+  //gl.uniform3f(u_cameraPos, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
+  gl.uniform3f(u_cameraPos, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
+  
+  gl.uniform1i(u_lightOn, g_lightOn); 
+
   // Draw the light
   var light = new Cube();
   light.color = [1,1,0,1];
+  light.textureNum = -2;
   light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
-  light.matrix.scale(0.1,0.1,0.1);
+  light.matrix.scale(-0.1,-0.1,-0.1);
   light.matrix.translate(-.5,-.5,-.5);
   light.renderFaster();
 
@@ -628,8 +687,8 @@ function renderScene(){
 
   //drawMap();
   var ball = new Sphere();
-  //ball.color = [0,1,0,1];
-  //ball.textureNum = -1;
+  ball.color = [0.4,0.4,0.4,1];
+  ball.textureNum = 0;
   if (g_normalOn){
     ball.textureNum = -3;
   }
@@ -644,7 +703,7 @@ function renderScene(){
   }else{
     sky.textureNum = -2;
   }
-  sky.matrix.scale(-8,-8,-8);
+  sky.matrix.scale(-5,-5,-5);
   sky.matrix.translate(-.5,-.5,-.5);
   sky.renderFaster();
 

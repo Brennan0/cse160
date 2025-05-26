@@ -20,21 +20,21 @@ class Pyr{
         gl.uniformMatrix4fv(u_ModelMatrix, false, matrix.elements);//this.matrix.elements);
         
         drawTriangle3D([0,0,0, 0,0,1, .5,.5,.5]);
-        gl.uniform4f(u_FragColor, rgba[0]*.9, rgba[1]*.9, rgba[2]*.9, rgba[3]);
+        //gl.uniform4f(u_FragColor, rgba[0]*.9, rgba[1]*.9, rgba[2]*.9, rgba[3]);
         drawTriangle3D([1,0,1, 0,0,1, .5,.5,.5]);
 
         // Pass the color of a point to u_FragColor uniform variable
-        gl.uniform4f(u_FragColor, rgba[0]*.5, rgba[1]*.5, rgba[2]*.5, rgba[3]);
+        //gl.uniform4f(u_FragColor, rgba[0]*.5, rgba[1]*.5, rgba[2]*.5, rgba[3]);
 
         //bottom
         drawTriangle3D([0,0,0, 0,0,1, 1,0,1]);
         drawTriangle3D([0,0,0, 1,0,1, 1,0,0]);
 
         
-        gl.uniform4f(u_FragColor, rgba[0]*.8, rgba[1]*.8, rgba[2]*.8, rgba[3]);
+        //gl.uniform4f(u_FragColor, rgba[0]*.8, rgba[1]*.8, rgba[2]*.8, rgba[3]);
 
         drawTriangle3D([0,0,0, .5,.5,.5, 1,0,0]);
-        gl.uniform4f(u_FragColor, rgba[0]*.75, rgba[1]*.75, rgba[2]*.75, rgba[3]);
+        //gl.uniform4f(u_FragColor, rgba[0]*.75, rgba[1]*.75, rgba[2]*.75, rgba[3]);
         drawTriangle3D([1,0,0, .5,.5,.5, 1,0,1]);
     }    
   }
