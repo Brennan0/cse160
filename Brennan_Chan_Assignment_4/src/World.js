@@ -596,7 +596,15 @@ function renderScene(){
   floor.render();
 
   //drawMap();
-
+  var ball = new Sphere();
+  //ball.color = [0,1,0,1];
+  //ball.textureNum = -1;
+  if (g_normalOn){
+    ball.textureNum = -3;
+  }
+  ball.matrix.setTranslate(0,0,0);
+  ball.matrix.scale(0.5,0.5,0.5);
+  ball.render();
   // Draw sky
   var sky = new Cube();
   sky.color = [.8,.9,1,1];
