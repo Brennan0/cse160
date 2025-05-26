@@ -7,6 +7,7 @@ precision mediump float;
   attribute vec3 a_Normal;
   varying vec2 v_UV;
   varying vec3 v_Normal;
+  varying vec4 v_VertPos;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
@@ -15,6 +16,7 @@ precision mediump float;
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
     v_Normal = a_Normal;
+    v_VertPos = u_ModelMatrix * a_Position;
   }`
 
 // Fragment shader program
@@ -26,6 +28,8 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler0;
   uniform sampler2D u_Sampler1;
   uniform int u_whichTexture;
+  uniform vec3 u_lightPos;
+  varying vec4 v_VertPos;
   void main() {
 
     if (u_whichTexture == -3) {                // Use normal map
@@ -47,6 +51,12 @@ var FSHADER_SOURCE = `
       gl_FragColor = vec4(1,0.25,0.8,1);  
     }
 
+    vec3 lightVector = vec3(v_VertPos)-u_lightPos;
+    float r = length(lightVector);
+    if(r < 1.0){
+      gl_FragColor = vec4(1,0,0,1);
+    } else if (r < 2.0){
+      gl_FragColor = vec4(0,1,0,1);}
   }`
 
 // Global vars
@@ -62,6 +72,7 @@ let u_GlobalRotateMatrix;
 let u_Sampler0;
 let u_Sampler1;
 let u_whichTexture;
+let u_lightPos;
 
 
 function setupWebGL(){
@@ -155,10 +166,17 @@ function connectVariablesToGLSL(){
     return;
   }
 
-  // Get the storage location of u_Sampler
+  // Get the storage location of u_whichTexture
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if (!u_whichTexture) {
     console.log('Failed to get the storage location of u_whichTexture');
+    return;
+  }
+
+  // Get the storage location of u_lightPos
+  u_lightPos = gl.getUniformLocation(gl.program, 'u_lightPos');
+  if (!u_lightPos) {
+    console.log('Failed to get the storage location of u_lightPos');
     return;
   }
 
@@ -187,6 +205,7 @@ let g_lastX = 0;
 let g_yellowAnimation = false;
 let g_magentaAnimation = false;
 let g_normalOn = false;
+let g_lightPos=[0,1,-2];
 
 // Set up actions for ther HTML UI elements
 function addAllActionsForHtmlUI(){
@@ -206,6 +225,9 @@ function addAllActionsForHtmlUI(){
   //document.getElementById('segSlide').addEventListener('mouseup', function() { g_selectedSeg = this.value; });
 
   document.getElementById('angleSlide').addEventListener('mousemove', function() { g_globalAngle = this.value; renderScene(); });
+  document.getElementById('lightSlideX').addEventListener('mousemove', function() { g_lightPos[0] = this.value/100; renderScene(); });
+  document.getElementById('lightSlideY').addEventListener('mousemove', function() { g_lightPos[1] = this.value/100; renderScene(); });
+  document.getElementById('lightSlideZ').addEventListener('mousemove', function() { g_lightPos[2] = this.value/100; renderScene(); });
 }
 
 function initTextures() {
@@ -586,6 +608,15 @@ function renderScene(){
   // Draw a test triangle
   //drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 0.0,0.0,0.0]);
 
+  gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+  // Draw the light
+  var light = new Cube();
+  light.color = [1,1,0,1];
+  light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+  light.matrix.scale(0.1,0.1,0.1);
+  light.matrix.translate(-.5,-.5,-.5);
+  light.renderFaster();
+
   // Draw floor
   var floor = new Cube();
   floor.color = [1,0,0,1];
@@ -602,7 +633,7 @@ function renderScene(){
   if (g_normalOn){
     ball.textureNum = -3;
   }
-  ball.matrix.setTranslate(0,0,0);
+  ball.matrix.setTranslate(0.8,.2,0);
   ball.matrix.scale(0.5,0.5,0.5);
   ball.render();
   // Draw sky
@@ -718,7 +749,7 @@ function drawAnimal(){
   var b1 = new Cube();
   b1.color = [.5,.4,.3,1.0];
   b1.matrix.textureNum = -2;
-  b1.matrix.translate(2 - 0.005 * - g_yellowAngle,-.4 - 0.009 * Math.abs(g_yellowAngle),-4);
+  b1.matrix.translate(2 - 0.005 * - g_yellowAngle,-.4 - 0.009 * Math.abs(g_yellowAngle),0);
   //b1.matrix.translate(-0.25,-.6,-4);
   b1.matrix.rotate(g_wholeAngle/4,0,1,0);
   b1.matrix.rotate(180,0,1,0);
