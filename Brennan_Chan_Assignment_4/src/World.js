@@ -35,6 +35,11 @@ var FSHADER_SOURCE = `
   uniform vec3 u_lightColor;
   varying vec4 v_VertPos;
   uniform bool u_lightOn;
+
+  uniform vec3 u_lightDir;
+  uniform float u_cutoff;
+  uniform float u_outerCuttoff;
+
   void main() {
 
     if (u_whichTexture == -3) {                // Use normal map
@@ -71,6 +76,7 @@ var FSHADER_SOURCE = `
     vec3 N = normalize(v_Normal);
     float nDotL = max(dot(N,L), 0.0);
 
+
     // Reflection
     vec3 R = reflect(-L, N);
 
@@ -82,6 +88,16 @@ var FSHADER_SOURCE = `
     // vec3(1.0,1.0,0.9);
     vec3 diffuse = vec3(u_lightColor) * vec3(gl_FragColor) * nDotL * 0.7;
     vec3 ambient = vec3(gl_FragColor) * 0.3;
+
+
+    // spotlight
+    float theta = dot(L, normalize(-u_lightDir));
+    float e = u_cutoff - u_outerCuttoff;
+    float intensity = clamp((theta - u_outerCuttoff) / e, 0.0, 1.0) * 2.0;
+
+    diffuse *= intensity;
+    specular *= intensity;
+
 
     if (u_lightOn){
       if(u_whichTexture == 0){
@@ -110,6 +126,9 @@ let u_cameraPos
 let u_lightOn;
 let u_NormalMatrix;
 let u_lightColor = [1.0, 1.0, 1.0];
+let u_lightDir = [0.0, -1.0, 0.0];
+let u_cutoff;
+let u_outerCutoff;
 
 
 function setupWebGL(){
@@ -242,6 +261,27 @@ function connectVariablesToGLSL(){
   u_lightColor = gl.getUniformLocation(gl.program, 'u_lightColor');
   if(!u_lightColor){
     console.log('Failed to get the storage location of u_lightColor');
+    return;
+  }
+
+  // Get the storage location of u_NormalMatrix
+  u_lightDir = gl.getUniformLocation(gl.program, 'u_lightDir');
+  if(!u_lightDir){
+    console.log('Failed to get the storage location of u_lightDir');
+    return;
+  }
+
+  // Get the storage location of u_NormalMatrix
+  u_cutoff = gl.getUniformLocation(gl.program, 'u_cutoff');
+  if(!u_cutoff){
+    console.log('Failed to get the storage location of u_cutoff');
+    return;
+  }
+
+  // Get the storage location of u_NormalMatrix
+  u_outerCutoff = gl.getUniformLocation(gl.program, 'u_outerCutoff');
+  if(!u_outerCutoff){
+    console.log('Failed to get the storage location of u_outerCutoff');
     return;
   }
 
@@ -694,6 +734,15 @@ function renderScene(){
 
   // pass the light color to glsl
   gl.uniform3f(u_lightColor, g_lightColor[0], g_lightColor[1], g_lightColor[2]);
+  
+  const lightDirection = [0.0, -1.0, 0.0];
+  const cutoffAngle = Math.cos(Math.PI / 60);
+  const outerCutoffAngle = Math.cos(Math.PI / 30);
+  
+  gl.uniform3fv(u_lightDir, lightDirection);
+  gl.uniform1f(u_cutoff, cutoffAngle);
+  gl.uniform1f(u_outerCutoff, outerCutoffAngle);
+
   // pass the camera position to glsl
   //gl.uniform3f(u_cameraPos, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
   gl.uniform3f(u_cameraPos, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
