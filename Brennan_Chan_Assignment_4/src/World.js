@@ -96,7 +96,7 @@ var FSHADER_SOURCE = `
     float intensity = clamp((theta - u_outerCuttoff) / e, 0.0, 1.0) * 2.0;
 
     diffuse *= intensity;
-    specular *= intensity;
+    specular *= max(intensity, 0.1);
 
 
     if (u_lightOn){
