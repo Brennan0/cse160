@@ -274,6 +274,7 @@ let g_normalOn = false;
 let g_lightPos=[0,1,-2];
 let g_lightOn = true; 
 let g_lightColor = [1.0, 1.0, 1.0];
+let g_benchy;
 
 // Set up actions for ther HTML UI elements
 function addAllActionsForHtmlUI(){
@@ -418,6 +419,7 @@ function main() {
   initTextures();
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  g_benchy = new Model(gl, 'benchy.obj');
   // Clear <canvas>
   //gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -698,12 +700,16 @@ function renderScene(){
   
   gl.uniform1i(u_lightOn, g_lightOn); 
 
-  let benchy = new Model(gl, "benchy.obj");
-  benchy.color = [1,1,1,1];
-  benchy.matrix.setScale(1,1,1);
-  benchy.matrix.setTranslate(1,1,1);
-  benchy.normalMatrix.setInverseOf(benchy.matrix).transpose();
-  benchy.render();
+  //let benchy = new Model(gl, "benchy.obj");
+  if(g_benchy && g_benchy.loader.isFullyLoaded){
+  g_benchy.color = [1,0.5,1,1];
+  g_benchy.textureNum = -2;
+  g_benchy.matrix.setScale(0.2,0.2,0.2);
+  g_benchy.matrix.translate(-5,-3,1);
+  g_benchy.matrix.rotate(-45,0,1,0);
+  g_benchy.normalMatrix.setInverseOf(g_benchy.matrix).transpose();
+  g_benchy.render();
+  }
 
   // Draw the light
   var light = new Cube();
@@ -756,7 +762,7 @@ function renderScene(){
   if (g_normalOn){
     body.textureNum = -3;
   }else{
-    body.textureNum = -2;
+    body.textureNum = 0;
   }
   body.matrix.translate(-0.25,-.75,-.5);
   body.matrix.rotate(0,1,0,0);
@@ -770,7 +776,7 @@ function renderScene(){
   if (g_normalOn){
     yellow.textureNum = -3;
   }else{
-    yellow.textureNum = -2;
+    yellow.textureNum = 0;
   }
   yellow.matrix.setTranslate(0,-.7,-.4);
   yellow.matrix.rotate(0,1,0,0);
@@ -793,7 +799,7 @@ function renderScene(){
   if (g_normalOn){
     magenta.textureNum = -3;
   }else{
-    magenta.textureNum = -2;
+    magenta.textureNum = 0;
   }
   magenta.matrix = yellowCoordinatesMat; //translate(-.1,.1,0,0);
   magenta.matrix.translate(0,0.5,0);
