@@ -32,6 +32,7 @@ var FSHADER_SOURCE = `
   uniform int u_whichTexture;
   uniform vec3 u_lightPos;
   uniform vec3 u_cameraPos;
+  uniform vec3 u_lightColor;
   varying vec4 v_VertPos;
   uniform bool u_lightOn;
   void main() {
@@ -78,8 +79,8 @@ var FSHADER_SOURCE = `
 
     // Specular
     float specular = pow(max(dot(E,R), 0.0),50.0) * 0.6;
-
-    vec3 diffuse = vec3(1.0,1.0,0.9) * vec3(gl_FragColor) * nDotL * 0.7;
+    // vec3(1.0,1.0,0.9);
+    vec3 diffuse = vec3(u_lightColor) * vec3(gl_FragColor) * nDotL * 0.7;
     vec3 ambient = vec3(gl_FragColor) * 0.3;
 
     if (u_lightOn){
@@ -108,6 +109,7 @@ let u_lightPos;
 let u_cameraPos
 let u_lightOn;
 let u_NormalMatrix;
+let u_lightColor = [1.0, 1.0, 1.0];
 
 
 function setupWebGL(){
@@ -236,9 +238,17 @@ function connectVariablesToGLSL(){
     return;
   }
 
+  // Get the storage location of u_NormalMatrix
+  u_lightColor = gl.getUniformLocation(gl.program, 'u_lightColor');
+  if(!u_lightColor){
+    console.log('Failed to get the storage location of u_lightColor');
+    return;
+  }
+
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
 }
+
 // Constants
 const POINT = 0;
 const TRIANGLE = 1;
@@ -259,9 +269,11 @@ let g_lastX = 0;
 
 let g_yellowAnimation = false;
 let g_magentaAnimation = false;
+let g_lightAnimation = false;
 let g_normalOn = false;
 let g_lightPos=[0,1,-2];
 let g_lightOn = true; 
+let g_lightColor = [1.0, 1.0, 1.0];
 
 // Set up actions for ther HTML UI elements
 function addAllActionsForHtmlUI(){
@@ -274,6 +286,9 @@ function addAllActionsForHtmlUI(){
 
   document.getElementById('magOnButton').onclick = function() {g_magentaAnimation = true;}
   document.getElementById('magOffButton').onclick = function() {g_magentaAnimation = false;}
+
+  document.getElementById('lightAnimOnButton').onclick = function() {g_lightAnimation = true;}
+  document.getElementById('lightAnimOffButton').onclick = function() {g_lightAnimation = false;}
   // size slider events
   //document.getElementById('sizeSlide').addEventListener('mouseup', function() { g_selectedSize = this.value; });
   document.getElementById('yellowSlide').addEventListener('mousemove', function() { g_yellowAngle = this.value; renderScene(); });
@@ -285,8 +300,11 @@ function addAllActionsForHtmlUI(){
   document.getElementById('lightSlideX').addEventListener('mousemove', function() { g_lightPos[0] = this.value/100; renderScene(); });
   document.getElementById('lightSlideY').addEventListener('mousemove', function() { g_lightPos[1] = this.value/100; renderScene(); });
   document.getElementById('lightSlideZ').addEventListener('mousemove', function() { g_lightPos[2] = this.value/100; renderScene(); });
+  document.getElementById('lightR').addEventListener('mousemove', function() { g_lightColor[0] = this.value/100.0; renderScene(); });
+  document.getElementById('lightG').addEventListener('mousemove', function() { g_lightColor[1] = this.value/100.0; renderScene(); });
+  document.getElementById('lightB').addEventListener('mousemove', function() { g_lightColor[2]= this.value/100.0; renderScene(); });
 }
-
+console.log(u_lightColor);
 function initTextures() {
   var image0 = new Image();  // Create the image object
   if (!image0) {
@@ -448,7 +466,9 @@ function updateAnimationAngles(){
     g_magentaAngle = (45*Math.sin(5 * g_seconds));
   }
 
-  //g_lightPos[0] = Math.cos(g_seconds);
+  if (g_lightAnimation){
+    g_lightPos[0] = Math.cos(g_seconds);
+  }
 }
 
 // can replace with vector class from asgn0
@@ -670,11 +690,20 @@ function renderScene(){
   // pass the light position to glsl
   gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
 
+  // pass the light color to glsl
+  gl.uniform3f(u_lightColor, g_lightColor[0], g_lightColor[1], g_lightColor[2]);
   // pass the camera position to glsl
   //gl.uniform3f(u_cameraPos, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
   gl.uniform3f(u_cameraPos, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
   
   gl.uniform1i(u_lightOn, g_lightOn); 
+
+  let benchy = new Model(gl, "benchy.obj");
+  benchy.color = [1,1,1,1];
+  benchy.matrix.setScale(1,1,1);
+  benchy.matrix.setTranslate(1,1,1);
+  benchy.normalMatrix.setInverseOf(benchy.matrix).transpose();
+  benchy.render();
 
   // Draw the light
   var light = new Cube();
@@ -694,7 +723,10 @@ function renderScene(){
   floor.matrix.translate(-.5,0,-.5);
   floor.render();
 
-  //drawMap();
+  //
+  // 
+  drawMap();
+
   var ball = new Sphere();
   ball.color = [0.4,0.4,0.4,1];
   ball.textureNum = 0;
@@ -704,7 +736,9 @@ function renderScene(){
   ball.matrix.setTranslate(0.8,.2,0);
   ball.matrix.scale(0.5,0.5,0.5);
   ball.render();
+
   // Draw sky
+  
   var sky = new Cube();
   sky.color = [.8,.9,1,1];
   if (g_normalOn){
@@ -712,10 +746,10 @@ function renderScene(){
   }else{
     sky.textureNum = -2;
   }
-  sky.matrix.scale(-5,-5,-5);
+  sky.matrix.scale(-10,-10,-10);
   sky.matrix.translate(-.5,-.5,-.5);
   sky.renderFaster();
-
+  
   // Draw the body cube
   var body = new Cube();
   body.color = [1.0,0.0,0.0,1.0];
