@@ -12,10 +12,12 @@ precision mediump float;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
   uniform mat4 u_GlobalRotateMatrix;
+  uniform mat4 u_NormalMatrix;
   void main() {
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
-    v_Normal = a_Normal;
+    v_Normal = normalize(vec3(u_NormalMatrix * vec4(a_Normal, 1)));
+    //v_Normal = a_Normal;
     v_VertPos = u_ModelMatrix * a_Position;
   }`
 
@@ -105,6 +107,7 @@ let u_whichTexture;
 let u_lightPos;
 let u_cameraPos
 let u_lightOn;
+let u_NormalMatrix;
 
 
 function setupWebGL(){
@@ -225,7 +228,13 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of u_lightOn');
     return;
   }
-
+  
+  // Get the storage location of u_NormalMatrix
+  u_NormalMatrix = gl.getUniformLocation(gl.program, 'u_NormalMatrix');
+  if(!u_NormalMatrix){
+    console.log('Failed to get the storage location of u_NormalMatrix');
+    return;
+  }
 
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
@@ -718,6 +727,7 @@ function renderScene(){
   body.matrix.translate(-0.25,-.75,-.5);
   body.matrix.rotate(0,1,0,0);
   body.matrix.scale(0.5,0.3,0.5);
+  body.normalMatrix.setInverseOf(body.matrix).transpose();
   body.renderFaster();
 
   // Draw left arm
@@ -741,6 +751,7 @@ function renderScene(){
   var yellowCoordinatesMat = new Matrix4(yellow.matrix);
   yellow.matrix.scale(0.25,.5,.25);
   yellow.matrix.translate(-.5,0,0);
+  yellow.normalMatrix.setInverseOf(yellow.matrix).transpose();
   yellow.renderFaster();
 
   var magenta = new Cube();
@@ -756,6 +767,7 @@ function renderScene(){
   //magenta.matrix.rotate(g_magentaAngle,0,0,1);
   magenta.matrix.scale(.4,.4,.4);
   magenta.matrix.translate(-.5,0,-0.001);
+  magenta.normalMatrix.setInverseOf(magenta.matrix).transpose();
   magenta.renderFaster();
 
   var eye1Coord = new Matrix4(magenta.matrix);
@@ -767,6 +779,7 @@ function renderScene(){
   eye1.matrix.rotate(270,1,0,0)
   eye1.matrix.translate(0,-1.13,.5);
   eye1.matrix.scale(.2,.1,.2);
+ eye1.normalMatrix.setInverseOf(eye1.matrix).transpose();
   eye1.renderFaster();
 
   eye1.matrix.translate(4,0,0);

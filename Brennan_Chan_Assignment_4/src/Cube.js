@@ -6,6 +6,7 @@ class Cube{
       //this.size = 5.0;
       //this.segments = 10;
       this.matrix = new Matrix4();
+      this.normalMatrix = new Matrix4();
       this.textureNum=-1;
       this.cubeUV32 = new Float32Array([
         0.335,0.335, 0.66,0.66, 0.66,0.335
@@ -118,6 +119,9 @@ class Cube{
       // Pass the matrix to u_ModelMatrix attribute
       gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);//this.matrix.elements);
 
+       // Pass the matrix to u_NormalMatrix attribute
+      gl.uniformMatrix4fv(u_NormalMatrix, false, this.normalMatrix.elements);
+      
       // Front of cube
       drawTriangle3DUV([0,0,0, 1,1,0, 1,0,0], [0.335,0.335, 0.66,0.66, 0.66,0.335]);
       drawTriangle3DUV([0,0,0, 0,1,0, 1,1,0], [0.335,0.335, 0.335,0.66, 0.66,0.66]);
@@ -221,6 +225,10 @@ class Cube{
 
       // Pass the matrix to u_ModelMatrix attribute
       gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);//this.matrix.elements);
+
+       // Pass the matrix to u_NormalMatrix attribute
+      gl.uniformMatrix4fv(u_NormalMatrix, false, this.normalMatrix.elements);
+
 
       // Made multiple buffers
 
