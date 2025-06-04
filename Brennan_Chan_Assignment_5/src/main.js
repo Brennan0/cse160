@@ -104,6 +104,157 @@ async function main() {
     } );
   }
 
+  // Pen
+  // Pen group with fire
+const penGroup = new THREE.Group();
+
+// Pen body
+const penBody = new THREE.CylinderGeometry(0.05, 0.05, 3, 32);
+const penMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+const penMesh = new THREE.Mesh(penBody, penMaterial);
+penMesh.rotation.z = Math.PI / 2;
+penGroup.add(penMesh);
+
+// Pen tip
+const penTip = new THREE.ConeGeometry(0.06, 0.2, 32);
+const tipMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+const tipMesh = new THREE.Mesh(penTip, tipMaterial);
+tipMesh.position.x = 1.6;
+tipMesh.rotation.z = -Math.PI / 2;
+penGroup.add(tipMesh);
+
+// Tray
+const trayGeo = new THREE.BoxGeometry( 3, 0.5, 1 );
+const loader = new THREE.TextureLoader();
+const texture = loader.load('../assets/rosewood.jpg');
+texture.colorSpace = THREE.SRGBColorSpace;
+
+const trayMat = new THREE.MeshPhongMaterial( { map: texture, shininess: 30 } );
+
+const tray = new THREE.Mesh( trayGeo, trayMat );
+tray.position.set(0,-0.325,0);
+// Shadows
+tray.castShadow = true;
+tray.receiveShadow = true;
+penGroup.add( tray );
+
+// Fire effect
+const fireMaterial = new THREE.MeshBasicMaterial({ color: 0xff4500, transparent: true, opacity: 0.8 });
+const fireGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+const fire = new THREE.Mesh(fireGeometry, fireMaterial);
+fire.position.x = 1.75;
+penGroup.add(fire);
+
+// Flicker function
+function flicker() {
+  fire.scale.setScalar(1 + Math.sin(Date.now() * 0.01) * 0.2);
+}
+
+// Smoke effect
+const smokeLoader = new THREE.TextureLoader();
+const smokeTex = smokeLoader.load('../assets/smoke.png');
+smokeTex.colorSpace = THREE.SRGBColorSpace;
+
+const smokeMat = new THREE.PointsMaterial({
+  map: smokeTex,
+  transparent: true,
+  depthWrite: false,
+  size: 3,
+  opacity: 0.5,
+});
+
+const smokeGeo = new THREE.BufferGeometry();
+const smokeCount = 20;
+const positions = [];
+
+for (let i = 0; i < smokeCount; i++) {
+  positions.push(
+    1.75 + (Math.random() - 0.5) * 0.1,
+    (Math.random() - 0.5) * 0.1,
+    (Math.random() - 0.5) * 0.1
+  );
+}
+smokeGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+const smoke = new THREE.Points(smokeGeo, smokeMat);
+//smoke.scale.set(2, 2, 2);
+penGroup.add(smoke);
+
+const velocities = new Array(smokeCount).fill().map(() => new THREE.Vector3(
+  (Math.random() - 0.5) * 0.002,
+  0.01 + Math.random() * 0.01,
+  (Math.random() - 0.5) * 0.002
+));
+
+// Position pen on table
+penGroup.scale.set(2,2,2);
+penGroup.position.set(2, 1.75, 10);
+penGroup.rotation.y = 3*Math.PI/4;
+//penGroup.rotation.z = -Math.PI/4;
+scene.add(penGroup);
+
+// LOL
+{
+  const webGLGroup = new THREE.Group();
+  // LOL
+		const loader = new THREE.TextureLoader();
+		const texture = loader.load( '../assets/webGL.jpg' );
+		texture.wrapS = THREE.RepeatWrapping;
+		texture.wrapT = THREE.RepeatWrapping;
+		texture.magFilter = THREE.NearestFilter;
+		texture.colorSpace = THREE.SRGBColorSpace;
+		//const repeats = planeSize / 2;
+		//texture.repeat.set( repeats, repeats );
+
+		const planeGeo = new THREE.PlaneGeometry( 7, 11 );
+		const planeMat = new THREE.MeshStandardMaterial( {
+			map: texture,
+      roughness: 1000,
+      metalness: 0,
+			//side: THREE.DoubleSide,
+		} );
+		const mesh = new THREE.Mesh( planeGeo, planeMat );
+    // Shadows
+    mesh.receiveShadow = true;
+    mesh.position.set(0,.28,0);
+    //mesh.scale.set(1.5,1.2,1.5);
+		mesh.rotation.x = Math.PI * - .5;
+		webGLGroup.add( mesh );
+    
+    const backMat = new THREE.MeshPhongMaterial({ color: '#363636'});
+    const pageMat = new THREE.MeshPhongMaterial({ color: 'beige'});
+
+    const frontGeo = new THREE.BoxGeometry(7, 0.5, 11);
+    const front = new THREE.Mesh(frontGeo, backMat);
+    front.castShadow = true;
+    front.receiveShadow = true;
+    webGLGroup.add(front);
+
+    const spineGeo = new THREE.BoxGeometry(0.3, 3, 11);
+    const spine = new THREE.Mesh(spineGeo, backMat);
+    spine.castShadow = true;
+    spine.receiveShadow = true;
+    spine.position.set(-3.5,-1.25,0);
+    webGLGroup.add(spine);
+
+    const pagesGeo = new THREE.BoxGeometry(6.5, 2.6, 10);
+    const pages = new THREE.Mesh(pagesGeo, pageMat);
+    pages.castShadow = true;
+    pages.receiveShadow = true;
+    pages.position.set(0,-1.25,0);
+    webGLGroup.add(pages);
+
+    const backGeo = new THREE.BoxGeometry(7, 0.5, 11);
+    const back = new THREE.Mesh(backGeo, backMat);
+    back.castShadow = true;
+    back.receiveShadow = true;
+    back.position.set(0,-2.5,0);
+    webGLGroup.add(back);
+
+    webGLGroup.position.set(12,4,6);
+    webGLGroup.rotation.y = -Math.PI/12
+    scene.add(webGLGroup);
+}
+
   // Book
   {
   const bookGroup = new THREE.Group();
@@ -173,7 +324,7 @@ async function main() {
   rightLow2.receiveShadow = true;
   bookGroup.add(rightLow2);
 
-  bookGroup.position.set(-10, 1.1, 5); // adjust as needed for your table
+  bookGroup.position.set(-10, 1.1, 10); // adjust as needed for your table
   bookGroup.rotation.y = Math.PI/8
   scene.add(bookGroup);
 }
@@ -504,6 +655,24 @@ async function main() {
     if(astronautGroup){
       astronautGroup.rotation.z += time * 0.5;
     }
+
+     flicker();
+
+  const pos = smoke.geometry.attributes.position.array;
+  for (let i = 0; i < smokeCount; i++) {
+    let idx = i * 3;
+    pos[idx] += velocities[i].x;
+    pos[idx + 1] += velocities[i].y;
+    pos[idx + 2] += velocities[i].z;
+
+    // reset smoke when too high
+    if (pos[idx + 1] > 2) {
+      pos[idx] = 1.75 + (Math.random() - 0.5) * 0.1;
+      pos[idx + 1] = 0;
+      pos[idx + 2] = (Math.random() - 0.5) * 0.1;
+    }
+  }
+  smoke.geometry.attributes.position.needsUpdate = true;
 
 		renderer.render( scene, camera );
 
