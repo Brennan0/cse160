@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-//import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
-//import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+
 
 async function main() {
 
@@ -16,7 +17,7 @@ async function main() {
 
   // Camera
 	const fov = 45;
-	const aspect = 2; // the canvas default
+	const aspect = 2; 
 	const near = 0.1;
 	const far = 100000;
 	const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
@@ -40,21 +41,18 @@ async function main() {
 		texture.wrapT = THREE.RepeatWrapping;
 		texture.magFilter = THREE.NearestFilter;
 		texture.colorSpace = THREE.SRGBColorSpace;
-		//const repeats = planeSize / 2;
-		//texture.repeat.set( repeats, repeats );
 
 		const planeGeo = new THREE.PlaneGeometry( planeSize, planeSize );
 		const planeMat = new THREE.MeshStandardMaterial( {
 			map: texture,
       roughness: 1000,
       metalness: 0,
-			//side: THREE.DoubleSide,
 		} );
 		const mesh = new THREE.Mesh( planeGeo, planeMat );
     // Shadows
     mesh.receiveShadow = true;
     mesh.position.set(0,1.1,0);
-    mesh.scale.set(1.5,1.2,1.5);
+    mesh.scale.set(1.5,1,1.5);
 		mesh.rotation.x = Math.PI * - .5;
 		scene.add( mesh );
 
@@ -77,6 +75,48 @@ async function main() {
       console.error( error );
 
     } );
+  }
+
+  // duck
+  {
+
+    const mtlLoader = new MTLLoader();
+		mtlLoader.load( '../assets/bird/12250_Bird_v1_L3.mtl', ( mtl ) => {
+
+			mtl.preload();
+			const objLoader = new OBJLoader();
+			objLoader.setMaterials( mtl );
+			objLoader.load( '../assets/bird/12250_Bird_v1_L3.obj', ( root ) => {
+        root.rotation.x = -Math.PI/2;
+        root.rotation.z = -Math.PI/1.5;
+        root.scale.set(0.45,0.45,0.45);
+        root.position.set(12,1,-7);
+				scene.add( root );
+
+			} );
+
+		} );
+  }
+
+  // cat
+  {
+
+    const mtlLoader = new MTLLoader();
+		mtlLoader.load( '../assets/cat.mtl', ( mtl ) => {
+
+			mtl.preload();
+			const objLoader = new OBJLoader();
+			objLoader.setMaterials( mtl );
+			objLoader.load( '../assets/cat.obj', ( root ) => {
+        root.rotation.x = -Math.PI/2;
+        root.rotation.z = Math.PI/6;
+        root.scale.set(0.25,0.25,0.25);
+        root.position.set(-12,1,-7);
+				scene.add( root );
+
+			} );
+
+		} );
   }
 
   // Bonsai tree
@@ -189,7 +229,6 @@ const velocities = new Array(smokeCount).fill().map(() => new THREE.Vector3(
 penGroup.scale.set(2,2,2);
 penGroup.position.set(2, 1.75, 10);
 penGroup.rotation.y = 3*Math.PI/4;
-//penGroup.rotation.z = -Math.PI/4;
 scene.add(penGroup);
 
 // LOL
@@ -202,21 +241,17 @@ scene.add(penGroup);
 		texture.wrapT = THREE.RepeatWrapping;
 		texture.magFilter = THREE.NearestFilter;
 		texture.colorSpace = THREE.SRGBColorSpace;
-		//const repeats = planeSize / 2;
-		//texture.repeat.set( repeats, repeats );
 
 		const planeGeo = new THREE.PlaneGeometry( 7, 11 );
 		const planeMat = new THREE.MeshStandardMaterial( {
 			map: texture,
       roughness: 1000,
       metalness: 0,
-			//side: THREE.DoubleSide,
 		} );
 		const mesh = new THREE.Mesh( planeGeo, planeMat );
     // Shadows
     mesh.receiveShadow = true;
     mesh.position.set(0,.28,0);
-    //mesh.scale.set(1.5,1.2,1.5);
 		mesh.rotation.x = Math.PI * - .5;
 		webGLGroup.add( mesh );
     
