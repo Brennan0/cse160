@@ -2,12 +2,14 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+//import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 //import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
-function main() {
+async function main() {
 
 	const canvas = document.querySelector( '#c' );
 	const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const clock = new THREE.Clock();
@@ -16,7 +18,7 @@ function main() {
 	const fov = 45;
 	const aspect = 2; // the canvas default
 	const near = 0.1;
-	const far = 1000;
+	const far = 100000;
 	const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 	camera.position.set( 0, 15, 60 );
 
@@ -52,7 +54,7 @@ function main() {
     // Shadows
     mesh.receiveShadow = true;
     mesh.position.set(0,1.1,0);
-    mesh.scale.set(1.5,1,1.5);
+    mesh.scale.set(1.5,1.2,1.5);
 		mesh.rotation.x = Math.PI * - .5;
 		scene.add( mesh );
 
@@ -61,11 +63,13 @@ function main() {
   // Skybox
   {
     const loader = new GLTFLoader();
-    loader.load( '../assets/skyline.glb', ( glb ) =>{
+    loader.load( '../assets/nebula.glb', ( glb ) =>{
 
       const model = glb.scene;
       model.position.set( 0, 0, 0 );
-      model.scale.set( 0.1, 0.1, 0.1);
+      model.scale.set( 1, 1, 1);
+      model.rotation.x = -10;
+      model.rotation.y = -10;
       scene.add( model );
 
     }, undefined, ( error ) => {
@@ -99,6 +103,81 @@ function main() {
 
     } );
   }
+
+  // Book
+  {
+  const bookGroup = new THREE.Group();
+  
+  // Materials
+  const backMat = new THREE.MeshPhongMaterial({ color: '#363636'});
+  const pageMat = new THREE.MeshPhongMaterial({ color: 'beige'});
+
+  // back 
+  const spineGeo = new THREE.BoxGeometry(15, 1, 10);
+  const spine = new THREE.Mesh(spineGeo, backMat);
+  spine.castShadow = true;
+  spine.receiveShadow = true;
+  bookGroup.add(spine);
+
+  // Left page
+  const leftGeo = new THREE.BoxGeometry(5, 2, 8);
+  const left = new THREE.Mesh(leftGeo, pageMat);
+  left.position.set(-2.7, 1, 0); // shift left
+  //left.rotation.y = THREE.MathUtils.degToRad(10); // slight open angle
+  left.castShadow = true;
+  left.receiveShadow = true;
+  bookGroup.add(left);
+
+  // Left lower 1
+  const leftLowGeo = new THREE.BoxGeometry(2, 1, 8);
+  const leftLow = new THREE.Mesh(leftLowGeo, pageMat);
+  leftLow.position.set(-5, 1, 0); // shift left
+  //left.rotation.y = THREE.MathUtils.degToRad(10); // slight open angle
+  leftLow.castShadow = true;
+  leftLow.receiveShadow = true;
+  bookGroup.add(leftLow);
+
+  // Left lower 2
+  const leftLow2Geo = new THREE.BoxGeometry(2, 0.6, 8);
+  const leftLow2 = new THREE.Mesh(leftLow2Geo, pageMat);
+  leftLow2.position.set(-5.7, 0.8, 0); // shift left
+  //left.rotation.y = THREE.MathUtils.degToRad(10); // slight open angle
+  leftLow2.castShadow = true;
+  leftLow2.receiveShadow = true;
+  bookGroup.add(leftLow2);
+
+  // Right page
+  const rightGeo = new THREE.BoxGeometry(5, 2, 8);
+  const right = new THREE.Mesh(rightGeo, pageMat);
+  right.position.set(2.7, 1, 0); // shift right
+  //right.rotation.y = THREE.MathUtils.degToRad(-10); // slight open angle
+  right.castShadow = true;
+  right.receiveShadow = true;
+  bookGroup.add(right);
+
+  // right lower 1
+  const rightLowGeo = new THREE.BoxGeometry(2, 1, 8);
+  const rightLow = new THREE.Mesh(rightLowGeo, pageMat);
+  rightLow.position.set(5, 1, 0); // shift left
+  //left.rotation.y = THREE.MathUtils.degToRad(10); // slight open angle
+  rightLow.castShadow = true;
+  rightLow.receiveShadow = true;
+  bookGroup.add(rightLow);
+
+  // right lower 2
+  const rightLow2Geo = new THREE.BoxGeometry(2, 0.6, 8);
+  const rightLow2 = new THREE.Mesh(rightLow2Geo, pageMat);
+  rightLow2.position.set(5.7, 0.8, 0); // shift left
+  //left.rotation.y = THREE.MathUtils.degToRad(10); // slight open angle
+  rightLow2.castShadow = true;
+  rightLow2.receiveShadow = true;
+  bookGroup.add(rightLow2);
+
+  bookGroup.position.set(-10, 1.1, 5); // adjust as needed for your table
+  bookGroup.rotation.y = Math.PI/8
+  scene.add(bookGroup);
+}
+
   // glass top
   {
     const cylGeo = new THREE.CylinderGeometry( 5, 5, 1, 32 );
@@ -114,37 +193,88 @@ function main() {
 		mesh.position.set(-25,13,-15 );
 		scene.add( mesh );
   }
-
+  
   // glass cylinder
+  let astronautGroup;
   {
-    const cylGeo = new THREE.CylinderGeometry( 5, 5, 10, 32 );
-    const cylMat = new THREE.MeshPhysicalMaterial( { 
-      transmission: 1,
-      thickness: 0.5,
-      roughness: 0.015,
-      envMap: 3
+    const glassGroup = new THREE.Group();
+    scene.add(glassGroup);
+    const glassMat = new THREE.MeshPhysicalMaterial({
+    transmission: 1,
+    opacity: 1,
+    transparent: true,
+    roughness: 0,
+    metalness: 0,
+    thickness: 0.05,
+    ior: 1.45,
+    clearcoat: 1,
+    envMapIntensity: 1
+    });
+
+    const glassGeo = new THREE.CylinderGeometry(5, 5, 10, 32);
+    const glassMesh = new THREE.Mesh(glassGeo, glassMat);
+    glassMesh.castShadow = false;
+    glassMesh.receiveShadow = true;
+
+    glassGroup.add(glassMesh);
+
+    // a small glowing cylinder inside the glass
+    const bulbGeo = new THREE.CylinderGeometry( 0.75, 0.5, 0.67, 32 );
+    const bulbMat = new THREE.MeshStandardMaterial({ emissive: 0xffffcc, emissiveIntensity: 10 });
+    const bulbMesh = new THREE.Mesh(bulbGeo, bulbMat);
+    bulbMesh.position.y = 5; // move bulb upward inside glass
+    bulbMesh.castShadow = true;
+
+    glassGroup.add(bulbMesh);
+
+    // spotlight emitting from bulb
+    const spot = new THREE.SpotLight(0xffee88, 100);
+    spot.position.set(0, 0.5, 0);
+    spot.target.position.set(0, -1, 0); // target above the glass
+    spot.angle = Math.PI / 4;
+    spot.penumbra = 0.5;
+    spot.castShadow = true;
+    glassGroup.add(spot);
+    glassGroup.add(spot.target);
+    
+
+    // astronaut
+    const loader = new GLTFLoader();
+    loader.load( '../assets/Astronaut.glb', ( glb ) =>{
+
+    astronautGroup = new THREE.Group();  // New group to act as pivot
+    const astronaut = glb.scene;
+
+    
+    astronaut.position.set(0, -3, 0);
+
+    astronaut.scale.set(1.5, 1.5, 1.5);
+    astronaut.traverse((child) => {
+    if (child.isMesh) {
+      child.receiveShadow = true;
+    }
+    });
+
+    astronautGroup.add(astronaut);
+    glassGroup.add(astronautGroup);
+
+    }, undefined, ( error ) => {
+
+      console.error( error );
+
     } );
-    const mesh = new THREE.Mesh( cylGeo, cylMat );
-    // Shadows
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-		mesh.position.set(-25,7.5,-15 );
-		scene.add( mesh );
+
+    glassGroup.position.set(-25, 7.5, -15);
   }
    // glass bottom
   {
     const cylGeo = new THREE.CylinderGeometry( 5, 2, 3, 32 );
 
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load('../assets/rosewood.jpg');
+    texture.colorSpace = THREE.SRGBColorSpace;
 
-    const cylMat = new THREE.MeshPhysicalMaterial( {
-      color: 0xffd700,         // Rich gold color
-      metalness: 1.0,          // Full metal
-      roughness: 0.1,          // Low roughness = more shiny
-      reflectivity: 0.8,       // High reflectivity
-      clearcoat: 0.1,          // Optional: adds a glossy finish
-      clearcoatRoughness: 0.05,
-
-    } );
+    const cylMat = new THREE.MeshPhongMaterial( { map: texture } );
     const mesh = new THREE.Mesh( cylGeo, cylMat );
     // Shadows
     mesh.castShadow = true;
@@ -298,52 +428,13 @@ function main() {
 	}
 
   
-  // Spot Light
-	{
-		const color = 0xFFFFFF;
-		const intensity = 1000;
-		const light = new THREE.SpotLight( color, intensity );
-		//light.position.set( 0, 10, 0 );
-		//light.target.position.set( - 5, 0, 0 );
-    light.position.set(-25,13,-15 );
-		light.target.position.set(-25,1,-15);
-		scene.add( light );
-		scene.add( light.target );
-    light.castShadow = true;
-    light.shadow.mapSize.width = 2048;
-    light.shadow.mapSize.height = 2048;
-    light.shadow.bias = -0.0001; // reduce shadow acne
 
-		const helper = new THREE.SpotLightHelper( light );
-		scene.add( helper );
-
-		function updateLight() {
-
-			light.target.updateMatrixWorld();
-			helper.update();
-
-		}
-
-		updateLight();
-
-		const gui = new GUI();
-		gui.addColor( new ColorGUIHelper( light, 'color' ), 'value' ).name( 'color' );
-		gui.add( light, 'intensity', 0, 250, 1 );
-		gui.add( light, 'distance', 0, 40 ).onChange( updateLight );
-		gui.add( new DegRadHelper( light, 'angle' ), 'value', 0, 90 ).name( 'angle' ).onChange( updateLight );
-		gui.add( light, 'penumbra', 0, 1, 0.01 );
-
-		makeXYZGUI( gui, light.position, 'position', updateLight );
-		makeXYZGUI( gui, light.target.position, 'target', updateLight );
-
-	}
-   
   // Directional light
   {
-    const color = 0xFFFFFF;
-    const intensity = 3;
+    const color = '#ffdf87';
+    const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-50, 7, 17);
+    light.position.set(-90, 20, -110);
     light.target.position.set(40, -2,0);
     light.castShadow = true;
     light.shadow.mapSize.width = 2048;
@@ -365,7 +456,7 @@ function main() {
   {
 
 		const color = 0xFFFFFF;
-		const intensity = 0.3;
+		const intensity = 0.7;
 		const light = new THREE.AmbientLight( color, intensity );
 		scene.add( light );
 
@@ -407,6 +498,11 @@ function main() {
     if (rotatingSphere){
       rotatingSphere.rotation.y += time * 0.5;
       rotatingSphere.position.y = 7 + (Math.sin(elapsed * 1.5) * 0.45);
+    }
+
+    // astronaut rotating
+    if(astronautGroup){
+      astronautGroup.rotation.z += time * 0.5;
     }
 
 		renderer.render( scene, camera );
